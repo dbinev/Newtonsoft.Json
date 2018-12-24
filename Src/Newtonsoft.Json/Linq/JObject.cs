@@ -175,7 +175,7 @@ namespace Newtonsoft.Json.Linq
 
             foreach (KeyValuePair<string, JToken> contentItem in o)
             {
-                JProperty existingProperty = Property(contentItem.Key, settings?.PropertyNameComparison ?? StringComparison.Ordinal);
+                JProperty? existingProperty = Property(contentItem.Key, settings?.PropertyNameComparison ?? StringComparison.Ordinal);
 
                 if (existingProperty == null)
                 {
@@ -262,7 +262,7 @@ namespace Newtonsoft.Json.Linq
         /// </summary>
         /// <param name="name">The property name.</param>
         /// <returns>A <see cref="JProperty"/> with the specified name or <c>null</c>.</returns>
-        public JProperty Property(string name)
+        public JProperty? Property(string name)
         {
             return Property(name, StringComparison.Ordinal);
         }
@@ -275,7 +275,7 @@ namespace Newtonsoft.Json.Linq
         /// <param name="name">The property name.</param>
         /// <param name="comparison">One of the enumeration values that specifies how the strings will be compared.</param>
         /// <returns>A <see cref="JProperty"/> matched with the specified name or <c>null</c>.</returns>
-        public JProperty Property(string name, StringComparison comparison)
+        public JProperty? Property(string name, StringComparison comparison)
         {
             if (name == null)
             {
@@ -352,13 +352,13 @@ namespace Newtonsoft.Json.Linq
             {
                 ValidationUtils.ArgumentNotNull(propertyName, nameof(propertyName));
 
-                JProperty property = Property(propertyName);
+                JProperty? property = Property(propertyName);
 
                 return property?.Value;
             }
             set
             {
-                JProperty property = Property(propertyName);
+                JProperty? property = Property(propertyName);
                 if (property != null)
                 {
                     property.Value = value;
@@ -397,7 +397,7 @@ namespace Newtonsoft.Json.Linq
         /// <exception cref="JsonReaderException">
         ///     <paramref name="reader"/> is not valid JSON.
         /// </exception>
-        public new static JObject Load(JsonReader reader, JsonLoadSettings settings)
+        public new static JObject Load(JsonReader reader, JsonLoadSettings? settings)
         {
             ValidationUtils.ArgumentNotNull(reader, nameof(reader));
 
@@ -453,7 +453,7 @@ namespace Newtonsoft.Json.Linq
         /// <example>
         ///   <code lang="cs" source="..\Src\Newtonsoft.Json.Tests\Documentation\LinqToJsonTests.cs" region="LinqToJsonCreateParse" title="Parsing a JSON Object from Text" />
         /// </example>
-        public new static JObject Parse(string json, JsonLoadSettings settings)
+        public new static JObject Parse(string json, JsonLoadSettings? settings)
         {
             using (JsonReader reader = new JsonTextReader(new StringReader(json)))
             {
@@ -518,7 +518,7 @@ namespace Newtonsoft.Json.Linq
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns>The <see cref="Newtonsoft.Json.Linq.JToken"/> with the specified property name.</returns>
-        public JToken GetValue(string propertyName)
+        public JToken? GetValue(string? propertyName)
         {
             return GetValue(propertyName, StringComparison.Ordinal);
         }
@@ -531,7 +531,7 @@ namespace Newtonsoft.Json.Linq
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="comparison">One of the enumeration values that specifies how the strings will be compared.</param>
         /// <returns>The <see cref="Newtonsoft.Json.Linq.JToken"/> with the specified property name.</returns>
-        public JToken GetValue(string propertyName, StringComparison comparison)
+        public JToken? GetValue(string? propertyName, StringComparison comparison)
         {
             if (propertyName == null)
             {
@@ -553,7 +553,7 @@ namespace Newtonsoft.Json.Linq
         /// <param name="value">The value.</param>
         /// <param name="comparison">One of the enumeration values that specifies how the strings will be compared.</param>
         /// <returns><c>true</c> if a value was successfully retrieved; otherwise, <c>false</c>.</returns>
-        public bool TryGetValue(string propertyName, StringComparison comparison, out JToken value)
+        public bool TryGetValue(string propertyName, StringComparison comparison, out JToken? value)
         {
             value = GetValue(propertyName, comparison);
             return (value != null);
@@ -591,7 +591,7 @@ namespace Newtonsoft.Json.Linq
         /// <returns><c>true</c> if item was successfully removed; otherwise, <c>false</c>.</returns>
         public bool Remove(string propertyName)
         {
-            JProperty property = Property(propertyName);
+            JProperty? property = Property(propertyName);
             if (property == null)
             {
                 return false;
@@ -607,9 +607,9 @@ namespace Newtonsoft.Json.Linq
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <returns><c>true</c> if a value was successfully retrieved; otherwise, <c>false</c>.</returns>
-        public bool TryGetValue(string propertyName, out JToken value)
+        public bool TryGetValue(string propertyName, out JToken? value)
         {
-            JProperty property = Property(propertyName);
+            JProperty? property = Property(propertyName);
             if (property == null)
             {
                 value = null;
@@ -637,7 +637,7 @@ namespace Newtonsoft.Json.Linq
 
         bool ICollection<KeyValuePair<string, JToken>>.Contains(KeyValuePair<string, JToken> item)
         {
-            JProperty property = Property(item.Key);
+            JProperty? property = Property(item.Key);
             if (property == null)
             {
                 return false;
@@ -752,12 +752,12 @@ namespace Newtonsoft.Json.Linq
             return AttributeCollection.Empty;
         }
 
-        string ICustomTypeDescriptor.GetClassName()
+        string? ICustomTypeDescriptor.GetClassName()
         {
             return null;
         }
 
-        string ICustomTypeDescriptor.GetComponentName()
+        string? ICustomTypeDescriptor.GetComponentName()
         {
             return null;
         }
@@ -767,17 +767,17 @@ namespace Newtonsoft.Json.Linq
             return new TypeConverter();
         }
 
-        EventDescriptor ICustomTypeDescriptor.GetDefaultEvent()
+        EventDescriptor? ICustomTypeDescriptor.GetDefaultEvent()
         {
             return null;
         }
 
-        PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty()
+        PropertyDescriptor? ICustomTypeDescriptor.GetDefaultProperty()
         {
             return null;
         }
 
-        object ICustomTypeDescriptor.GetEditor(Type editorBaseType)
+        object? ICustomTypeDescriptor.GetEditor(Type editorBaseType)
         {
             return null;
         }
@@ -792,7 +792,7 @@ namespace Newtonsoft.Json.Linq
             return EventDescriptorCollection.Empty;
         }
 
-        object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)
+        object? ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)
         {
             if (pd is JPropertyDescriptor)
             {

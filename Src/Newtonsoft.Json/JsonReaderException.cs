@@ -54,7 +54,7 @@ namespace Newtonsoft.Json
         /// Gets the path to the JSON where the error occurred.
         /// </summary>
         /// <value>The path to the JSON where the error occurred.</value>
-        public string Path { get; }
+        public string? Path { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonReaderException"/> class.
@@ -125,7 +125,7 @@ namespace Newtonsoft.Json
             return Create(reader as IJsonLineInfo, reader.Path, message, ex);
         }
 
-        internal static JsonReaderException Create(IJsonLineInfo lineInfo, string path, string message, Exception ex)
+        internal static JsonReaderException Create(IJsonLineInfo? lineInfo, string path, string message, Exception ex)
         {
             message = JsonPosition.FormatMessage(lineInfo, path, message);
 

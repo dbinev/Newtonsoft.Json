@@ -114,7 +114,7 @@ namespace Newtonsoft.Json.Converters
         /// <param name="serializer">The calling serializer.</param>
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            DefaultContractResolver resolver = serializer.ContractResolver as DefaultContractResolver;
+            DefaultContractResolver? resolver = serializer.ContractResolver as DefaultContractResolver?;
 
             Type unionType = UnionTypeLookupCache.Get(value.GetType());
             Union union = UnionCache.Get(unionType);
@@ -148,16 +148,16 @@ namespace Newtonsoft.Json.Converters
         /// <param name="existingValue">The existing value of object being read.</param>
         /// <param name="serializer">The calling serializer.</param>
         /// <returns>The object value.</returns>
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object? ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null)
             {
                 return null;
             }
 
-            UnionCase caseInfo = null;
-            string caseName = null;
-            JArray fields = null;
+            UnionCase? caseInfo = null;
+            string? caseName = null;
+            JArray? fields = null;
 
             // start object
             reader.ReadAndAssert();

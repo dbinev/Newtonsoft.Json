@@ -100,7 +100,7 @@ namespace Newtonsoft.Json.Serialization
             }
         }
 
-        internal bool TrySetMember(IDynamicMetaObjectProvider dynamicProvider, string name, object value)
+        internal bool TrySetMember(IDynamicMetaObjectProvider dynamicProvider, string name, object? value)
         {
             ValidationUtils.ArgumentNotNull(dynamicProvider, nameof(dynamicProvider));
 

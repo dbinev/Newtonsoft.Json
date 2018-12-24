@@ -34,8 +34,8 @@ namespace Newtonsoft.Json.Serialization
 {
     internal class JsonSerializerProxy : JsonSerializer
     {
-        private readonly JsonSerializerInternalReader _serializerReader;
-        private readonly JsonSerializerInternalWriter _serializerWriter;
+        private readonly JsonSerializerInternalReader? _serializerReader;
+        private readonly JsonSerializerInternalWriter? _serializerWriter;
         private readonly JsonSerializer _serializer;
 
         public override event EventHandler<ErrorEventArgs> Error
@@ -250,7 +250,7 @@ namespace Newtonsoft.Json.Serialization
             _serializer = serializerWriter.Serializer;
         }
 
-        internal override object DeserializeInternal(JsonReader reader, Type objectType)
+        internal override object? DeserializeInternal(JsonReader reader, Type? objectType)
         {
             if (_serializerReader != null)
             {

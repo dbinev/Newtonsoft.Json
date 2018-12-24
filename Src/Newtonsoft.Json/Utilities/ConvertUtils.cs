@@ -251,7 +251,7 @@ namespace Newtonsoft.Json.Utilities
         private static readonly ThreadSafeStore<StructMultiKey<Type, Type>, Func<object, object>> CastConverters =
             new ThreadSafeStore<StructMultiKey<Type, Type>, Func<object, object>>(CreateCastConverter);
 
-        private static Func<object, object> CreateCastConverter(StructMultiKey<Type, Type> t)
+        private static Func<object, object?> CreateCastConverter(StructMultiKey<Type, Type> t)
         {
             Type initialType = t.Value1;
             Type targetType = t.Value2;
@@ -378,7 +378,7 @@ namespace Newtonsoft.Json.Utilities
             }
         }
 
-        private static bool TryConvert(object initialValue, CultureInfo culture, Type targetType, out object value)
+        private static bool TryConvert(object initialValue, CultureInfo culture, Type targetType, out object? value)
         {
             try
             {
@@ -397,7 +397,7 @@ namespace Newtonsoft.Json.Utilities
             }
         }
 
-        private static ConvertResult TryConvertInternal(object initialValue, CultureInfo culture, Type targetType, out object value)
+        private static ConvertResult TryConvertInternal(object initialValue, CultureInfo culture, Type targetType, out object? value)
         {
             if (initialValue == null)
             {
@@ -567,7 +567,7 @@ namespace Newtonsoft.Json.Utilities
         /// The converted type. If conversion was unsuccessful, the initial value
         /// is returned if assignable to the target type.
         /// </returns>
-        public static object ConvertOrCast(object initialValue, CultureInfo culture, Type targetType)
+        public static object? ConvertOrCast(object initialValue, CultureInfo culture, Type targetType)
         {
             if (targetType == typeof(object))
             {
@@ -579,12 +579,12 @@ namespace Newtonsoft.Json.Utilities
                 return null;
             }
 
-            if (TryConvert(initialValue, culture, targetType, out object convertedValue))
+            if (TryConvert(initialValue, culture, targetType, out object? convertedValue))
             {
                 return convertedValue;
             }
 
-            return EnsureTypeAssignable(initialValue, ReflectionUtils.GetObjectType(initialValue), targetType);
+            return EnsureTypeAssignable(initialValue, ReflectionUtils.GetObjectType(initialValue)!, targetType);
         }
 #endregion
 

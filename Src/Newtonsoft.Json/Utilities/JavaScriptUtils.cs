@@ -41,7 +41,7 @@ namespace Newtonsoft.Json.Utilities
 {
     internal static class BufferUtils
     {
-        public static char[] RentBuffer(IArrayPool<char> bufferPool, int minSize)
+        public static char[] RentBuffer(IArrayPool<char>? bufferPool, int minSize)
         {
             if (bufferPool == null)
             {
@@ -52,12 +52,12 @@ namespace Newtonsoft.Json.Utilities
             return buffer;
         }
 
-        public static void ReturnBuffer(IArrayPool<char> bufferPool, char[] buffer)
+        public static void ReturnBuffer(IArrayPool<char>? bufferPool, char[] buffer)
         {
             bufferPool?.Return(buffer);
         }
 
-        public static char[] EnsureBufferSize(IArrayPool<char> bufferPool, int size, char[] buffer)
+        public static char[] EnsureBufferSize(IArrayPool<char>? bufferPool, int size, char[]? buffer)
         {
             if (bufferPool == null)
             {
@@ -142,7 +142,7 @@ namespace Newtonsoft.Json.Utilities
         }
 
         public static void WriteEscapedJavaScriptString(TextWriter writer, string s, char delimiter, bool appendDelimiters,
-            bool[] charEscapeFlags, StringEscapeHandling stringEscapeHandling, IArrayPool<char> bufferPool, ref char[] writeBuffer)
+            bool[] charEscapeFlags, StringEscapeHandling stringEscapeHandling, IArrayPool<char>? bufferPool, ref char[]? writeBuffer)
         {
             // leading delimiter
             if (appendDelimiters)
@@ -181,7 +181,7 @@ namespace Newtonsoft.Json.Utilities
                             continue;
                         }
 
-                        string escapedValue;
+                        string? escapedValue;
 
                         switch (c)
                         {
@@ -230,7 +230,7 @@ namespace Newtonsoft.Json.Utilities
                                             writeBuffer = BufferUtils.EnsureBufferSize(bufferPool, UnicodeTextLength, writeBuffer);
                                         }
 
-                                        StringUtils.ToCharAsUnicode(c, writeBuffer);
+                                        StringUtils.ToCharAsUnicode(c, writeBuffer!);
 
                                         // slightly hacky but it saves multiple conditions in if test
                                         escapedValue = EscapedUnicodeText;
@@ -450,7 +450,7 @@ namespace Newtonsoft.Json.Utilities
 
             int length;
             bool isEscapedUnicodeText = false;
-            string escapedValue = null;
+            string? escapedValue = null;
 
             for (int i = lastWritePosition; i < s.Length; i++)
             {
@@ -565,7 +565,7 @@ namespace Newtonsoft.Json.Utilities
         }
 #endif
 
-        public static bool TryGetDateFromConstructorJson(JsonReader reader, out DateTime dateTime, out string errorMessage)
+        public static bool TryGetDateFromConstructorJson(JsonReader reader, out DateTime dateTime, out string? errorMessage)
         {
             dateTime = default;
             errorMessage = null;
@@ -626,7 +626,7 @@ namespace Newtonsoft.Json.Utilities
             return true;
         }
 
-        private static bool TryGetDateConstructorValue(JsonReader reader, out long? integer, out string errorMessage)
+        private static bool TryGetDateConstructorValue(JsonReader reader, out long? integer, out string? errorMessage)
         {
             integer = null;
             errorMessage = null;

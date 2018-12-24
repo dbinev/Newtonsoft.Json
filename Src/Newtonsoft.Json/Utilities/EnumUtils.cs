@@ -124,9 +124,9 @@ namespace Newtonsoft.Json.Utilities
             return TryToString(enumType, value, camelCase ? _camelCaseNamingStrategy : null, out name);
         }
 
-        public static bool TryToString(Type enumType, object value, NamingStrategy namingStrategy, out string name)
+        public static bool TryToString(Type enumType, object value, NamingStrategy? namingStrategy, out string? name)
         {
-            EnumInfo enumInfo = ValuesAndNamesPerEnum.Get(new StructMultiKey<Type, NamingStrategy>(enumType, namingStrategy));
+            EnumInfo enumInfo = ValuesAndNamesPerEnum.Get(new StructMultiKey<Type, NamingStrategy?>(enumType, namingStrategy));
             ulong v = ToUInt64(value);
 
             if (!enumInfo.IsFlags)
@@ -185,7 +185,7 @@ namespace Newtonsoft.Json.Utilities
                 index--;
             }
 
-            string returnString;
+            string? returnString;
             if (result != 0)
             {
                 // We were unable to represent this number as a bitwise or of valid flags
@@ -249,7 +249,7 @@ namespace Newtonsoft.Json.Utilities
             }
         }
 
-        public static object ParseEnum(Type enumType, NamingStrategy namingStrategy, string value, bool disallowNumber)
+        public static object ParseEnum(Type enumType, NamingStrategy? namingStrategy, string value, bool disallowNumber)
         {
             ValidationUtils.ArgumentNotNull(enumType, nameof(enumType));
             ValidationUtils.ArgumentNotNull(value, nameof(value));
@@ -259,7 +259,7 @@ namespace Newtonsoft.Json.Utilities
                 throw new ArgumentException("Type provided must be an Enum.", nameof(enumType));
             }
 
-            EnumInfo entry = ValuesAndNamesPerEnum.Get(new StructMultiKey<Type, NamingStrategy>(enumType, namingStrategy));
+            EnumInfo entry = ValuesAndNamesPerEnum.Get(new StructMultiKey<Type, NamingStrategy?>(enumType, namingStrategy));
             string[] enumNames = entry.Names;
             string[] resolvedNames = entry.ResolvedNames;
             ulong[] enumValues = entry.Values;

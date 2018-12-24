@@ -6,7 +6,12 @@ namespace Newtonsoft.Json.Linq.JsonPath
 {
     internal class FieldFilter : PathFilter
     {
-        public string Name { get; set; }
+        internal string? Name;
+
+        public FieldFilter(string? name)
+        {
+            Name = name;
+        }
 
         public override IEnumerable<JToken> ExecuteFilter(JToken root, IEnumerable<JToken> current, bool errorWhenNoMatch)
         {

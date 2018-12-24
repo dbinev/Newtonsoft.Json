@@ -67,13 +67,13 @@ namespace Newtonsoft.Json.Serialization
     /// <param name="o">The object to set extension data on.</param>
     /// <param name="key">The extension data key.</param>
     /// <param name="value">The extension data value.</param>
-    public delegate void ExtensionDataSetter(object o, string key, object value);
+    public delegate void ExtensionDataSetter(object o, string key, object? value);
 
     /// <summary>
     /// Gets extension data for an object during serialization.
     /// </summary>
     /// <param name="o">The object to set extension data on.</param>
-    public delegate IEnumerable<KeyValuePair<object, object>> ExtensionDataGetter(object o);
+    public delegate IEnumerable<KeyValuePair<object, object>>? ExtensionDataGetter(object o);
 
     /// <summary>
     /// Contract details for a <see cref="System.Type"/> used by the <see cref="JsonSerializer"/>.
@@ -129,11 +129,11 @@ namespace Newtonsoft.Json.Serialization
         /// Gets or sets the default <see cref="JsonConverter" /> for this contract.
         /// </summary>
         /// <value>The converter.</value>
-        public JsonConverter Converter { get; set; }
+        public JsonConverter? Converter { get; set; }
 
         // internally specified JsonConverter's to override default behavour
         // checked for after passed in converters and attribute specified converters
-        internal JsonConverter InternalConverter { get; set; }
+        internal JsonConverter? InternalConverter { get; set; }
 
         /// <summary>
         /// Gets or sets all methods called immediately after deserialization of the object.

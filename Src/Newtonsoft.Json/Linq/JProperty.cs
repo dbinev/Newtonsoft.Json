@@ -38,11 +38,11 @@ namespace Newtonsoft.Json.Linq
     public partial class JProperty : JContainer
     {
         #region JPropertyList
-        private class JPropertyList : IList<JToken>
+        private class JPropertyList : IList<JToken?>
         {
-            internal JToken _token;
+            internal JToken? _token;
 
-            public IEnumerator<JToken> GetEnumerator()
+            public IEnumerator<JToken?> GetEnumerator()
             {
                 if (_token != null)
                 {
@@ -55,7 +55,7 @@ namespace Newtonsoft.Json.Linq
                 return GetEnumerator();
             }
 
-            public void Add(JToken item)
+            public void Add(JToken? item)
             {
                 _token = item;
             }
@@ -65,12 +65,12 @@ namespace Newtonsoft.Json.Linq
                 _token = null;
             }
 
-            public bool Contains(JToken item)
+            public bool Contains(JToken? item)
             {
                 return (_token == item);
             }
 
-            public void CopyTo(JToken[] array, int arrayIndex)
+            public void CopyTo(JToken?[] array, int arrayIndex)
             {
                 if (_token != null)
                 {
@@ -78,7 +78,7 @@ namespace Newtonsoft.Json.Linq
                 }
             }
 
-            public bool Remove(JToken item)
+            public bool Remove(JToken? item)
             {
                 if (_token == item)
                 {
@@ -92,12 +92,12 @@ namespace Newtonsoft.Json.Linq
 
             public bool IsReadOnly => false;
 
-            public int IndexOf(JToken item)
+            public int IndexOf(JToken? item)
             {
                 return (_token == item) ? 0 : -1;
             }
 
-            public void Insert(int index, JToken item)
+            public void Insert(int index, JToken? item)
             {
                 if (index == 0)
                 {
@@ -113,7 +113,7 @@ namespace Newtonsoft.Json.Linq
                 }
             }
 
-            public JToken this[int index]
+            public JToken? this[int index]
             {
                 get => (index == 0) ? _token : null;
                 set
@@ -248,7 +248,7 @@ namespace Newtonsoft.Json.Linq
 
         internal override void MergeItem(object content, JsonMergeSettings settings)
         {
-            JToken value = (content as JProperty)?.Value;
+            JToken? value = (content as JProperty)?.Value;
 
             if (value != null && value.Type != JTokenType.Null)
             {
@@ -357,7 +357,7 @@ namespace Newtonsoft.Json.Linq
         /// <param name="settings">The <see cref="JsonLoadSettings"/> used to load the JSON.
         /// If this is <c>null</c>, default load settings will be used.</param>
         /// <returns>A <see cref="JProperty"/> that contains the JSON that was read from the specified <see cref="JsonReader"/>.</returns>
-        public new static JProperty Load(JsonReader reader, JsonLoadSettings settings)
+        public new static JProperty Load(JsonReader reader, JsonLoadSettings? settings)
         {
             if (reader.TokenType == JsonToken.None)
             {
@@ -374,7 +374,7 @@ namespace Newtonsoft.Json.Linq
                 throw JsonReaderException.Create(reader, "Error reading JProperty from JsonReader. Current JsonReader item is not a property: {0}".FormatWith(CultureInfo.InvariantCulture, reader.TokenType));
             }
 
-            JProperty p = new JProperty((string)reader.Value);
+            JProperty p = new JProperty((string)reader.Value!);
             p.SetLineInfo(reader as IJsonLineInfo, settings);
 
             p.ReadTokenFrom(reader, settings);

@@ -228,7 +228,7 @@ namespace Newtonsoft.Json.Linq
         /// <value>
         /// A <see cref="JToken"/> containing the first child token of the <see cref="JToken"/>.
         /// </value>
-        public override JToken First
+        public override JToken? First
         {
             get
             {
@@ -243,7 +243,7 @@ namespace Newtonsoft.Json.Linq
         /// <value>
         /// A <see cref="JToken"/> containing the last child token of the <see cref="JToken"/>.
         /// </value>
-        public override JToken Last
+        public override JToken? Last
         {
             get
             {
@@ -410,8 +410,8 @@ namespace Newtonsoft.Json.Linq
             CheckReentrancy();
 
             JToken item = children[index];
-            JToken previous = (index == 0) ? null : children[index - 1];
-            JToken next = (index == children.Count - 1) ? null : children[index + 1];
+            JToken? previous = (index == 0) ? null : children[index - 1];
+            JToken? next = (index == children.Count - 1) ? null : children[index + 1];
 
             if (previous != null)
             {
@@ -722,7 +722,7 @@ namespace Newtonsoft.Json.Linq
             MergeItem(content, settings);
         }
 
-        internal void ReadTokenFrom(JsonReader reader, JsonLoadSettings options)
+        internal void ReadTokenFrom(JsonReader reader, JsonLoadSettings? options)
         {
             int startDepth = reader.Depth;
 
@@ -741,10 +741,10 @@ namespace Newtonsoft.Json.Linq
             }
         }
 
-        internal void ReadContentFrom(JsonReader r, JsonLoadSettings settings)
+        internal void ReadContentFrom(JsonReader r, JsonLoadSettings? settings)
         {
             ValidationUtils.ArgumentNotNull(r, nameof(r));
-            IJsonLineInfo lineInfo = r as IJsonLineInfo;
+            IJsonLineInfo? lineInfo = r as IJsonLineInfo?;
 
             JContainer parent = this;
 
@@ -853,13 +853,13 @@ namespace Newtonsoft.Json.Linq
             } while (r.Read());
         }
 
-        private static JProperty ReadProperty(JsonReader r, JsonLoadSettings settings, IJsonLineInfo lineInfo, JContainer parent)
+        private static JProperty? ReadProperty(JsonReader r, JsonLoadSettings? settings, IJsonLineInfo? lineInfo, JContainer parent)
         {
             DuplicatePropertyNameHandling duplicatePropertyNameHandling = settings?.DuplicatePropertyNameHandling ?? DuplicatePropertyNameHandling.Replace;
 
             JObject parentObject = (JObject)parent;
-            string propertyName = r.Value.ToString();
-            JProperty existingPropertyWithName = parentObject.Property(propertyName);
+            string propertyName = r.Value!.ToString();
+            JProperty? existingPropertyWithName = parentObject.Property(propertyName);
             if (existingPropertyWithName != null)
             {
                 if (duplicatePropertyNameHandling == DuplicatePropertyNameHandling.Ignore)
@@ -905,7 +905,7 @@ namespace Newtonsoft.Json.Linq
 
         PropertyDescriptorCollection ITypedList.GetItemProperties(PropertyDescriptor[] listAccessors)
         {
-            ICustomTypeDescriptor d = First as ICustomTypeDescriptor;
+            ICustomTypeDescriptor? d = First as ICustomTypeDescriptor;
             return d?.GetProperties();
         }
 #endif

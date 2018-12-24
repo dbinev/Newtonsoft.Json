@@ -61,7 +61,7 @@ namespace Newtonsoft.Json.Serialization
 
         internal JsonContract KeyContract { get; set; }
 
-        private readonly Type _genericCollectionDefinitionType;
+        private readonly Type? _genericCollectionDefinitionType;
 
         private Type _genericWrapperType;
         private ObjectConstructor<object> _genericWrapperCreator;

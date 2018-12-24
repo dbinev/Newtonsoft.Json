@@ -812,7 +812,7 @@ namespace Newtonsoft.Json
             return IsSeparator(_chars[_charPos]) || _chars[_charPos] == '\0';
         }
 
-        private async Task MatchAndSetAsync(string value, JsonToken newToken, object tokenValue, CancellationToken cancellationToken)
+        private async Task MatchAndSetAsync(string value, JsonToken newToken, object? tokenValue, CancellationToken cancellationToken)
         {
             if (await MatchValueWithTrailingSeparatorAsync(value, cancellationToken).ConfigureAwait(false))
             {
@@ -1131,7 +1131,7 @@ namespace Newtonsoft.Json
             SetToken(JsonToken.None);
         }
 
-        private async Task<object> ReadStringValueAsync(ReadType readType, CancellationToken cancellationToken)
+        private async Task<object?> ReadStringValueAsync(ReadType readType, CancellationToken cancellationToken)
         {
             EnsureBuffer();
 
@@ -1266,7 +1266,7 @@ namespace Newtonsoft.Json
             }
         }
 
-        private async Task<object> ReadNumberValueAsync(ReadType readType, CancellationToken cancellationToken)
+        private async Task<object?> ReadNumberValueAsync(ReadType readType, CancellationToken cancellationToken)
         {
             EnsureBuffer();
 
@@ -1522,12 +1522,12 @@ namespace Newtonsoft.Json
         /// property returns the <see cref="byte"/>[]. This result will be <c>null</c> at the end of an array.</returns>
         /// <remarks>Derived classes must override this method to get asynchronous behaviour. Otherwise it will
         /// execute synchronously, returning an already-completed task.</remarks>
-        public override Task<byte[]> ReadAsBytesAsync(CancellationToken cancellationToken = default)
+        public override Task<byte[]?> ReadAsBytesAsync(CancellationToken cancellationToken = default)
         {
             return _safeAsync ? DoReadAsBytesAsync(cancellationToken) : base.ReadAsBytesAsync(cancellationToken);
         }
 
-        internal async Task<byte[]> DoReadAsBytesAsync(CancellationToken cancellationToken)
+        internal async Task<byte[]?> DoReadAsBytesAsync(CancellationToken cancellationToken)
         {
             EnsureBuffer();
             bool isWrapped = false;
@@ -1563,7 +1563,7 @@ namespace Newtonsoft.Json
                             case '"':
                             case '\'':
                                 await ParseStringAsync(currentChar, ReadType.ReadAsBytes, cancellationToken).ConfigureAwait(false);
-                                byte[] data = (byte[])Value;
+                                byte[]? data = (byte[]?)Value;
                                 if (isWrapped)
                                 {
                                     await ReaderReadAndAssertAsync(cancellationToken).ConfigureAwait(false);
@@ -1753,14 +1753,14 @@ namespace Newtonsoft.Json
         /// property returns the <see cref="string"/>. This result will be <c>null</c> at the end of an array.</returns>
         /// <remarks>Derived classes must override this method to get asynchronous behaviour. Otherwise it will
         /// execute synchronously, returning an already-completed task.</remarks>
-        public override Task<string> ReadAsStringAsync(CancellationToken cancellationToken = default)
+        public override Task<string?> ReadAsStringAsync(CancellationToken cancellationToken = default)
         {
             return _safeAsync ? DoReadAsStringAsync(cancellationToken) : base.ReadAsStringAsync(cancellationToken);
         }
 
-        internal async Task<string> DoReadAsStringAsync(CancellationToken cancellationToken)
+        internal async Task<string?> DoReadAsStringAsync(CancellationToken cancellationToken)
         {
-            return (string)await ReadStringValueAsync(ReadType.ReadAsString, cancellationToken).ConfigureAwait(false);
+            return (string?)await ReadStringValueAsync(ReadType.ReadAsString, cancellationToken).ConfigureAwait(false);
         }
     }
 }

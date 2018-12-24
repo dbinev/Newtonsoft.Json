@@ -34,14 +34,14 @@ namespace Newtonsoft.Json.Linq
     public class JTokenReader : JsonReader, IJsonLineInfo
     {
         private readonly JToken _root;
-        private string _initialPath;
-        private JToken _parent;
-        private JToken _current;
+        private string? _initialPath;
+        private JToken? _parent;
+        private JToken? _current;
 
         /// <summary>
         /// Gets the <see cref="JToken"/> at the reader's current position.
         /// </summary>
-        public JToken CurrentToken => _current;
+        public JToken? CurrentToken => _current;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JTokenReader"/> class.
@@ -243,7 +243,7 @@ namespace Newtonsoft.Json.Linq
             }
         }
 
-        private string SafeToString(object value)
+        private string SafeToString(object? value)
         {
             return value?.ToString();
         }

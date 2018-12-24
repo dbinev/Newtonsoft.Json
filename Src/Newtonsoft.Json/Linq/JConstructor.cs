@@ -36,7 +36,7 @@ namespace Newtonsoft.Json.Linq
     /// </summary>
     public partial class JConstructor : JContainer
     {
-        private string _name;
+        private string? _name;
         private readonly List<JToken> _values = new List<JToken>();
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Newtonsoft.Json.Linq
         /// Gets or sets the name of this constructor.
         /// </summary>
         /// <value>The constructor name.</value>
-        public string Name
+        public string? Name
         {
             get => _name;
             set => _name = value;
@@ -217,7 +217,7 @@ namespace Newtonsoft.Json.Linq
         /// <param name="settings">The <see cref="JsonLoadSettings"/> used to load the JSON.
         /// If this is <c>null</c>, default load settings will be used.</param>
         /// <returns>A <see cref="JConstructor"/> that contains the JSON that was read from the specified <see cref="JsonReader"/>.</returns>
-        public new static JConstructor Load(JsonReader reader, JsonLoadSettings settings)
+        public new static JConstructor Load(JsonReader reader, JsonLoadSettings? settings)
         {
             if (reader.TokenType == JsonToken.None)
             {
@@ -234,7 +234,7 @@ namespace Newtonsoft.Json.Linq
                 throw JsonReaderException.Create(reader, "Error reading JConstructor from JsonReader. Current JsonReader item is not a constructor: {0}".FormatWith(CultureInfo.InvariantCulture, reader.TokenType));
             }
 
-            JConstructor c = new JConstructor((string)reader.Value);
+            JConstructor c = new JConstructor((string)reader.Value!);
             c.SetLineInfo(reader as IJsonLineInfo, settings);
 
             c.ReadTokenFrom(reader, settings);

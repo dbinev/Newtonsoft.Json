@@ -41,14 +41,14 @@ namespace Newtonsoft.Json.Serialization
         internal Required? _required;
         internal bool _hasExplicitDefaultValue;
 
-        private object _defaultValue;
+        private object? _defaultValue;
         private bool _hasGeneratedDefaultValue;
         private string _propertyName;
         internal bool _skipPropertyNameEscape;
         private Type _propertyType;
 
         // use to cache contract during deserialization
-        internal JsonContract PropertyContract { get; set; }
+        internal JsonContract? PropertyContract { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the property.
@@ -116,14 +116,14 @@ namespace Newtonsoft.Json.Serialization
         /// If set this converter takes precedence over the contract converter for the property type.
         /// </summary>
         /// <value>The converter.</value>
-        public JsonConverter Converter { get; set; }
+        public JsonConverter? Converter { get; set; }
 
         /// <summary>
         /// Gets or sets the member converter.
         /// </summary>
         /// <value>The member converter.</value>
         [Obsolete("MemberConverter is obsolete. Use Converter instead.")]
-        public JsonConverter MemberConverter
+        public JsonConverter? MemberConverter
         {
             get => Converter;
             set => Converter = value;
@@ -157,7 +157,7 @@ namespace Newtonsoft.Json.Serialization
         /// Gets the default value.
         /// </summary>
         /// <value>The default value.</value>
-        public object DefaultValue
+        public object? DefaultValue
         {
             get
             {
@@ -175,7 +175,7 @@ namespace Newtonsoft.Json.Serialization
             }
         }
 
-        internal object GetResolvedDefaultValue()
+        internal object? GetResolvedDefaultValue()
         {
             if (_propertyType == null)
             {
@@ -278,7 +278,7 @@ namespace Newtonsoft.Json.Serialization
         /// Gets or sets the converter used when serializing the property's collection items.
         /// </summary>
         /// <value>The collection's items converter.</value>
-        public JsonConverter ItemConverter { get; set; }
+        public JsonConverter? ItemConverter { get; set; }
 
         /// <summary>
         /// Gets or sets whether this property's collection items are serialized as a reference.

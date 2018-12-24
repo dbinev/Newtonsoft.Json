@@ -107,7 +107,7 @@ namespace Newtonsoft.Json.Linq.JsonPath
                     case '(':
                         if (_currentIndex > currentPartStartIndex)
                         {
-                            string member = _expression.Substring(currentPartStartIndex, _currentIndex - currentPartStartIndex);
+                            string? member = _expression.Substring(currentPartStartIndex, _currentIndex - currentPartStartIndex);
                             if (member == "*")
                             {
                                 member = null;
@@ -136,7 +136,7 @@ namespace Newtonsoft.Json.Linq.JsonPath
                     case '.':
                         if (_currentIndex > currentPartStartIndex)
                         {
-                            string member = _expression.Substring(currentPartStartIndex, _currentIndex - currentPartStartIndex);
+                            string? member = _expression.Substring(currentPartStartIndex, _currentIndex - currentPartStartIndex);
                             if (member == "*")
                             {
                                 member = null;
@@ -177,7 +177,7 @@ namespace Newtonsoft.Json.Linq.JsonPath
 
             if (_currentIndex > currentPartStartIndex)
             {
-                string member = _expression.Substring(currentPartStartIndex, _currentIndex - currentPartStartIndex).TrimEnd();
+                string? member = _expression.Substring(currentPartStartIndex, _currentIndex - currentPartStartIndex).TrimEnd();
                 if (member == "*")
                 {
                     member = null;
@@ -196,9 +196,9 @@ namespace Newtonsoft.Json.Linq.JsonPath
             return atPathEnd;
         }
 
-        private static PathFilter CreatePathFilter(string member, bool scan)
+        private static PathFilter CreatePathFilter(string? member, bool scan)
         {
-            PathFilter filter = (scan) ? (PathFilter)new ScanFilter {Name = member} : new FieldFilter {Name = member};
+            PathFilter filter = (scan) ? (PathFilter)new ScanFilter(member) : new FieldFilter(member);
             return filter;
         }
 
@@ -230,7 +230,7 @@ namespace Newtonsoft.Json.Linq.JsonPath
         {
             int start = _currentIndex;
             int? end = null;
-            List<int> indexes = null;
+            List<int>? indexes = null;
             int colonCount = 0;
             int? startIndex = null;
             int? endIndex = null;
@@ -421,26 +421,19 @@ namespace Newtonsoft.Json.Linq.JsonPath
 
             if (!scan)
             {
-                return new QueryFilter
-                {
-                    Expression = expression
-                };
+                return new QueryFilter(expression);
             }
             else
             {
-                return new QueryScanFilter
-                {
-                    Expression = expression
-                };
+                return new QueryScanFilter(expression);
             }
         }
 
-        private bool TryParseExpression(out List<PathFilter> expressionPath)
+        private bool TryParseExpression(out List<PathFilter>? expressionPath)
         {
             if (_expression[_currentIndex] == '$')
             {
-                expressionPath = new List<PathFilter>();
-                expressionPath.Add(RootFilter.Instance);
+                expressionPath = new List<PathFilter> { RootFilter.Instance };
             }
             else if (_expression[_currentIndex] == '@')
             {
@@ -454,7 +447,7 @@ namespace Newtonsoft.Json.Linq.JsonPath
 
             _currentIndex++;
 
-            if (ParsePath(expressionPath, _currentIndex, true))
+            if (ParsePath(expressionPath!, _currentIndex, true))
             {
                 throw new JsonException("Path ended with open query.");
             }
@@ -471,12 +464,12 @@ namespace Newtonsoft.Json.Linq.JsonPath
         {
             EatWhitespace();
 
-            if (TryParseExpression(out var expressionPath))
+            if (TryParseExpression(out List<PathFilter>? expressionPath))
             {
                 EatWhitespace();
                 EnsureLength("Path ended with open query.");
 
-                return expressionPath;
+                return expressionPath!;
             }
 
             if (TryParseValue(out var value))
@@ -492,13 +485,13 @@ namespace Newtonsoft.Json.Linq.JsonPath
 
         private QueryExpression ParseExpression()
         {
-            QueryExpression rootExpression = null;
-            CompositeExpression parentExpression = null;
+            QueryExpression? rootExpression = null;
+            CompositeExpression? parentExpression = null;
 
             while (_currentIndex < _expression.Length)
             {
                 object left = ParseSide();
-                object right = null;
+                object? right = null;
 
                 QueryOperator op;
                 if (_expression[_currentIndex] == ')'
@@ -526,7 +519,7 @@ namespace Newtonsoft.Json.Linq.JsonPath
                     if (parentExpression != null)
                     {
                         parentExpression.Expressions.Add(booleanExpression);
-                        return rootExpression;
+                        return rootExpression!;
                     }
 
                     return booleanExpression;
@@ -582,7 +575,7 @@ namespace Newtonsoft.Json.Linq.JsonPath
             throw new JsonException("Path ended with open query.");
         }
 
-        private bool TryParseValue(out object value)
+        private bool TryParseValue(out object? value)
         {
             char currentChar = _expression[_currentIndex];
             if (currentChar == '\'')
@@ -832,7 +825,7 @@ namespace Newtonsoft.Json.Linq.JsonPath
 
         private PathFilter ParseQuotedField(char indexerCloseChar, bool scan)
         {
-            List<string> fields = null;
+            List<string>? fields = null;
 
             while (_currentIndex < _expression.Length)
             {
@@ -847,8 +840,8 @@ namespace Newtonsoft.Json.Linq.JsonPath
                     {
                         fields.Add(field);
                         return (scan)
-                            ? (PathFilter)new ScanMultipleFilter { Names = fields }
-                            : (PathFilter)new FieldMultipleFilter { Names = fields };
+                            ? (PathFilter)new ScanMultipleFilter(fields)
+                            : (PathFilter)new FieldMultipleFilter(fields);
                     }
                     else
                     {

@@ -32,7 +32,7 @@ namespace Newtonsoft.Json.Utilities
     /// </summary>
     internal struct StringBuffer
     {
-        private char[] _buffer;
+        private char[]? _buffer;
         private int _position;
 
         public int Position
@@ -111,6 +111,6 @@ namespace Newtonsoft.Json.Utilities
             return new string(_buffer, start, length);
         }
 
-        public char[] InternalBuffer => _buffer;
+        public char[]? InternalBuffer => _buffer;
     }
 }

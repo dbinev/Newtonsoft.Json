@@ -54,7 +54,7 @@ namespace Newtonsoft.Json.Converters
         /// Gets or sets the date time format used when converting a date to and from JSON.
         /// </summary>
         /// <value>The date time format used when converting a date to and from JSON.</value>
-        public string DateTimeFormat
+        public string? DateTimeFormat
         {
             get => _dateTimeFormat ?? string.Empty;
             set => _dateTimeFormat = (string.IsNullOrEmpty(value)) ? null : value;
@@ -104,7 +104,7 @@ namespace Newtonsoft.Json.Converters
 #endif
             else
             {
-                throw new JsonSerializationException("Unexpected value when converting date. Expected DateTime or DateTimeOffset, got {0}.".FormatWith(CultureInfo.InvariantCulture, ReflectionUtils.GetObjectType(value)));
+                throw new JsonSerializationException("Unexpected value when converting date. Expected DateTime or DateTimeOffset, got {0}.".FormatWith(CultureInfo.InvariantCulture, ReflectionUtils.GetObjectType(value)!));
             }
 
             writer.WriteValue(text);
@@ -118,7 +118,7 @@ namespace Newtonsoft.Json.Converters
         /// <param name="existingValue">The existing value of object being read.</param>
         /// <param name="serializer">The calling serializer.</param>
         /// <returns>The object value.</returns>
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object? ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             bool nullable = ReflectionUtils.IsNullableType(objectType);
             if (reader.TokenType == JsonToken.Null)

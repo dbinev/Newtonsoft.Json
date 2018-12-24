@@ -55,10 +55,7 @@ namespace Newtonsoft.Json.Tests.Linq.JsonPath
                         Operator = QueryOperator.Exists,
                         Left = new List<PathFilter>
                         {
-                            new FieldFilter
-                            {
-                                Name = "FirstName"
-                            }
+                            new FieldFilter("FirstName")
                         }
                     },
                     new BooleanQueryExpression
@@ -66,10 +63,7 @@ namespace Newtonsoft.Json.Tests.Linq.JsonPath
                         Operator = QueryOperator.Exists,
                         Left = new List<PathFilter>
                         {
-                            new FieldFilter
-                            {
-                                Name = "LastName"
-                            }
+                            new FieldFilter("LastName")
                         }
                     }
                 }
@@ -113,10 +107,7 @@ namespace Newtonsoft.Json.Tests.Linq.JsonPath
                         Operator = QueryOperator.Exists,
                         Left = new List<PathFilter>
                         {
-                            new FieldFilter
-                            {
-                                Name = "FirstName"
-                            }
+                            new FieldFilter("FirstName")
                         }
                     },
                     new BooleanQueryExpression
@@ -124,10 +115,7 @@ namespace Newtonsoft.Json.Tests.Linq.JsonPath
                         Operator = QueryOperator.Exists,
                         Left = new List<PathFilter>
                         {
-                            new FieldFilter
-                            {
-                                Name = "LastName"
-                            }
+                            new FieldFilter("LastName")
                         }
                     }
                 }

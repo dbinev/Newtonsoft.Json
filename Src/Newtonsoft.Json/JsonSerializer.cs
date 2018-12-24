@@ -640,7 +640,7 @@ namespace Newtonsoft.Json
         /// The <see cref="JsonSerializer"/> will use default settings 
         /// from <see cref="JsonConvert.DefaultSettings"/> as well as the specified <see cref="JsonSerializerSettings"/>.
         /// </returns>
-        public static JsonSerializer CreateDefault(JsonSerializerSettings settings)
+        public static JsonSerializer CreateDefault(JsonSerializerSettings? settings)
         {
             JsonSerializer serializer = CreateDefault();
             if (settings != null)
@@ -814,14 +814,14 @@ namespace Newtonsoft.Json
 
             SetupReader(
                 reader,
-                out CultureInfo previousCulture,
+                out CultureInfo? previousCulture,
                 out DateTimeZoneHandling? previousDateTimeZoneHandling,
                 out DateParseHandling? previousDateParseHandling,
                 out FloatParseHandling? previousFloatParseHandling,
                 out int? previousMaxDepth,
-                out string previousDateFormatString);
+                out string? previousDateFormatString);
 
-            TraceJsonReader traceJsonReader = (TraceWriter != null && TraceWriter.LevelFilter >= TraceLevel.Verbose)
+            TraceJsonReader? traceJsonReader = (TraceWriter != null && TraceWriter.LevelFilter >= TraceLevel.Verbose)
                 ? CreateTraceJsonReader(reader)
                 : null;
 
@@ -881,25 +881,25 @@ namespace Newtonsoft.Json
         /// <param name="objectType">The <see cref="Type"/> of object being deserialized.</param>
         /// <returns>The instance of <paramref name="objectType"/> being deserialized.</returns>
         [DebuggerStepThrough]
-        public object Deserialize(JsonReader reader, Type objectType)
+        public object? Deserialize(JsonReader reader, Type? objectType)
         {
             return DeserializeInternal(reader, objectType);
         }
 
-        internal virtual object DeserializeInternal(JsonReader reader, Type objectType)
+        internal virtual object DeserializeInternal(JsonReader reader, Type? objectType)
         {
             ValidationUtils.ArgumentNotNull(reader, nameof(reader));
 
             SetupReader(
                 reader,
-                out CultureInfo previousCulture,
+                out CultureInfo? previousCulture,
                 out DateTimeZoneHandling? previousDateTimeZoneHandling,
                 out DateParseHandling? previousDateParseHandling,
                 out FloatParseHandling? previousFloatParseHandling,
                 out int? previousMaxDepth,
-                out string previousDateFormatString);
+                out string? previousDateFormatString);
 
-            TraceJsonReader traceJsonReader = (TraceWriter != null && TraceWriter.LevelFilter >= TraceLevel.Verbose)
+            TraceJsonReader? traceJsonReader = (TraceWriter != null && TraceWriter.LevelFilter >= TraceLevel.Verbose)
                 ? CreateTraceJsonReader(reader)
                 : null;
 
@@ -916,7 +916,7 @@ namespace Newtonsoft.Json
             return value;
         }
 
-        private void SetupReader(JsonReader reader, out CultureInfo previousCulture, out DateTimeZoneHandling? previousDateTimeZoneHandling, out DateParseHandling? previousDateParseHandling, out FloatParseHandling? previousFloatParseHandling, out int? previousMaxDepth, out string previousDateFormatString)
+        private void SetupReader(JsonReader reader, out CultureInfo? previousCulture, out DateTimeZoneHandling? previousDateTimeZoneHandling, out DateParseHandling? previousDateParseHandling, out FloatParseHandling? previousFloatParseHandling, out int? previousMaxDepth, out string? previousDateFormatString)
         {
             if (_culture != null && !_culture.Equals(reader.Culture))
             {
@@ -987,7 +987,7 @@ namespace Newtonsoft.Json
             }
         }
 
-        private void ResetReader(JsonReader reader, CultureInfo previousCulture, DateTimeZoneHandling? previousDateTimeZoneHandling, DateParseHandling? previousDateParseHandling, FloatParseHandling? previousFloatParseHandling, int? previousMaxDepth, string previousDateFormatString)
+        private void ResetReader(JsonReader reader, CultureInfo? previousCulture, DateTimeZoneHandling? previousDateTimeZoneHandling, DateParseHandling? previousDateParseHandling, FloatParseHandling? previousFloatParseHandling, int? previousMaxDepth, string? previousDateFormatString)
         {
             // reset reader back to previous options
             if (previousCulture != null)
@@ -1044,7 +1044,7 @@ namespace Newtonsoft.Json
         /// This parameter is used when <see cref="JsonSerializer.TypeNameHandling"/> is <see cref="Json.TypeNameHandling.Auto"/> to write out the type name if the type of the value does not match.
         /// Specifying the type is optional.
         /// </param>
-        public void Serialize(JsonWriter jsonWriter, object value, Type objectType)
+        public void Serialize(JsonWriter jsonWriter, object value, Type? objectType)
         {
             SerializeInternal(jsonWriter, value, objectType);
         }
@@ -1087,7 +1087,7 @@ namespace Newtonsoft.Json
             return traceReader;
         }
 
-        internal virtual void SerializeInternal(JsonWriter jsonWriter, object value, Type objectType)
+        internal virtual void SerializeInternal(JsonWriter jsonWriter, object value, Type? objectType)
         {
             ValidationUtils.ArgumentNotNull(jsonWriter, nameof(jsonWriter));
 
@@ -1127,21 +1127,21 @@ namespace Newtonsoft.Json
                 jsonWriter.StringEscapeHandling = _stringEscapeHandling.GetValueOrDefault();
             }
 
-            CultureInfo previousCulture = null;
+            CultureInfo? previousCulture = null;
             if (_culture != null && !_culture.Equals(jsonWriter.Culture))
             {
                 previousCulture = jsonWriter.Culture;
                 jsonWriter.Culture = _culture;
             }
 
-            string previousDateFormatString = null;
+            string? previousDateFormatString = null;
             if (_dateFormatStringSet && jsonWriter.DateFormatString != _dateFormatString)
             {
                 previousDateFormatString = jsonWriter.DateFormatString;
                 jsonWriter.DateFormatString = _dateFormatString;
             }
 
-            TraceJsonWriter traceJsonWriter = (TraceWriter != null && TraceWriter.LevelFilter >= TraceLevel.Verbose)
+            TraceJsonWriter? traceJsonWriter = (TraceWriter != null && TraceWriter.LevelFilter >= TraceLevel.Verbose)
                 ? new TraceJsonWriter(jsonWriter)
                 : null;
 
@@ -1194,12 +1194,12 @@ namespace Newtonsoft.Json
             return _referenceResolver;
         }
 
-        internal JsonConverter GetMatchingConverter(Type type)
+        internal JsonConverter? GetMatchingConverter(Type type)
         {
             return GetMatchingConverter(_converters, type);
         }
 
-        internal static JsonConverter GetMatchingConverter(IList<JsonConverter> converters, Type objectType)
+        internal static JsonConverter? GetMatchingConverter(IList<JsonConverter> converters, Type objectType)
         {
 #if DEBUG
             ValidationUtils.ArgumentNotNull(objectType, nameof(objectType));

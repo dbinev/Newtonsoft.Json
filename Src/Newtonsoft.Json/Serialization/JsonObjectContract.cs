@@ -128,10 +128,10 @@ namespace Newtonsoft.Json.Serialization
 
         internal bool ExtensionDataIsJToken;
         private bool? _hasRequiredOrDefaultValueProperties;
-        private ObjectConstructor<object> _overrideCreator;
-        private ObjectConstructor<object> _parameterizedCreator;
-        private JsonPropertyCollection _creatorParameters;
-        private Type _extensionDataValueType;
+        private ObjectConstructor<object>? _overrideCreator;
+        private ObjectConstructor<object>? _parameterizedCreator;
+        private JsonPropertyCollection? _creatorParameters;
+        private Type? _extensionDataValueType;
 
         internal bool HasRequiredOrDefaultValueProperties
         {

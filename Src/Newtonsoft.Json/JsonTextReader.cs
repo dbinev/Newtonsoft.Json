@@ -65,7 +65,7 @@ namespace Newtonsoft.Json
 #endif
 
         private readonly TextReader _reader;
-        private char[] _chars;
+        private char[]? _chars;
         private int _charsUsed;
         private int _charPos;
         private int _lineStartPos;
@@ -73,7 +73,7 @@ namespace Newtonsoft.Json
         private bool _isEndOfFile;
         private StringBuffer _stringBuffer;
         private StringReference _stringReference;
-        private IArrayPool<char> _arrayPool;
+        private IArrayPool<char>? _arrayPool;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonTextReader"/> class with the specified <see cref="TextReader"/>.
@@ -107,7 +107,7 @@ namespace Newtonsoft.Json
         /// <summary>
         /// Gets or sets the reader's property name table.
         /// </summary>
-        public JsonNameTable PropertyNameTable { get; set; }
+        public JsonNameTable? PropertyNameTable { get; set; }
 
         /// <summary>
         /// Gets or sets the reader's character buffer pool.
@@ -475,16 +475,16 @@ namespace Newtonsoft.Json
         /// Reads the next JSON token from the underlying <see cref="TextReader"/> as a <see cref="String"/>.
         /// </summary>
         /// <returns>A <see cref="String"/>. This method will return <c>null</c> at the end of an array.</returns>
-        public override string ReadAsString()
+        public override string? ReadAsString()
         {
-            return (string)ReadStringValue(ReadType.ReadAsString);
+            return (string?)ReadStringValue(ReadType.ReadAsString);
         }
 
         /// <summary>
         /// Reads the next JSON token from the underlying <see cref="TextReader"/> as a <see cref="Byte"/>[].
         /// </summary>
         /// <returns>A <see cref="Byte"/>[] or <c>null</c> if the next JSON token is null. This method will return <c>null</c> at the end of an array.</returns>
-        public override byte[] ReadAsBytes()
+        public override byte[]? ReadAsBytes()
         {
             EnsureBuffer();
             bool isWrapped = false;
@@ -588,7 +588,7 @@ namespace Newtonsoft.Json
             }
         }
 
-        private object ReadStringValue(ReadType readType)
+        private object? ReadStringValue(ReadType readType)
         {
             EnsureBuffer();
 
@@ -717,7 +717,7 @@ namespace Newtonsoft.Json
             }
         }
 
-        private object FinishReadQuotedStringValue(ReadType readType)
+        private object? FinishReadQuotedStringValue(ReadType readType)
         {
             switch (readType)
             {
@@ -891,7 +891,7 @@ namespace Newtonsoft.Json
             SetStateBasedOnCurrent();
         }
 
-        private object ReadNumberValue(ReadType readType)
+        private object? ReadNumberValue(ReadType readType)
         {
             EnsureBuffer();
 
@@ -1001,7 +1001,7 @@ namespace Newtonsoft.Json
             }
         }
 
-        private object FinishReadQuotedNumber(ReadType readType)
+        private object? FinishReadQuotedNumber(ReadType readType)
         {
             switch (readType)
             {
@@ -2189,7 +2189,7 @@ namespace Newtonsoft.Json
             SetToken(numberType, numberValue, false);
         }
 
-        private JsonReaderException ThrowReaderError(string message, Exception ex = null)
+        private JsonReaderException ThrowReaderError(string message, Exception? ex = null)
         {
             SetToken(JsonToken.Undefined, null, false);
             return JsonReaderException.Create(this, message, ex);

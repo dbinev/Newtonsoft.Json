@@ -546,7 +546,7 @@ namespace Newtonsoft.Json
         /// <returns>A <see cref="Task"/> that represents the asynchronous operation.</returns>
         /// <remarks>The default behaviour is to execute synchronously, returning an already-completed task. Derived
         /// classes can override this behaviour for true asynchronicity.</remarks>
-        public virtual Task WriteCommentAsync(string text, CancellationToken cancellationToken = default)
+        public virtual Task WriteCommentAsync(string? text, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -570,7 +570,7 @@ namespace Newtonsoft.Json
         /// <returns>A <see cref="Task"/> that represents the asynchronous operation.</returns>
         /// <remarks>The default behaviour is to execute synchronously, returning an already-completed task. Derived
         /// classes can override this behaviour for true asynchronicity.</remarks>
-        public virtual Task WriteRawValueAsync(string json, CancellationToken cancellationToken = default)
+        public virtual Task WriteRawValueAsync(string? json, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -673,7 +673,7 @@ namespace Newtonsoft.Json
         /// <returns>A <see cref="Task"/> that represents the asynchronous operation.</returns>
         /// <remarks>The default behaviour is to execute synchronously, returning an already-completed task. Derived
         /// classes can override this behaviour for true asynchronicity.</remarks>
-        public Task WriteTokenAsync(JsonToken token, object value, CancellationToken cancellationToken = default)
+        public Task WriteTokenAsync(JsonToken token, object? value, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -691,10 +691,10 @@ namespace Newtonsoft.Json
                     return WriteStartArrayAsync(cancellationToken);
                 case JsonToken.StartConstructor:
                     ValidationUtils.ArgumentNotNull(value, nameof(value));
-                    return WriteStartConstructorAsync(value.ToString(), cancellationToken);
+                    return WriteStartConstructorAsync(value!.ToString(), cancellationToken);
                 case JsonToken.PropertyName:
                     ValidationUtils.ArgumentNotNull(value, nameof(value));
-                    return WritePropertyNameAsync(value.ToString(), cancellationToken);
+                    return WritePropertyNameAsync(value!.ToString(), cancellationToken);
                 case JsonToken.Comment:
                     return WriteCommentAsync(value?.ToString(), cancellationToken);
                 case JsonToken.Integer:
@@ -724,7 +724,7 @@ namespace Newtonsoft.Json
                     return WriteValueAsync(Convert.ToDouble(value, CultureInfo.InvariantCulture), cancellationToken);
                 case JsonToken.String:
                     ValidationUtils.ArgumentNotNull(value, nameof(value));
-                    return WriteValueAsync(value.ToString(), cancellationToken);
+                    return WriteValueAsync(value!.ToString(), cancellationToken);
                 case JsonToken.Boolean:
                     ValidationUtils.ArgumentNotNull(value, nameof(value));
                     return WriteValueAsync(Convert.ToBoolean(value, CultureInfo.InvariantCulture), cancellationToken);
@@ -755,7 +755,7 @@ namespace Newtonsoft.Json
                         return WriteValueAsync(guid, cancellationToken);
                     }
 
-                    return WriteValueAsync((byte[])value, cancellationToken);
+                    return WriteValueAsync((byte[]?)value, cancellationToken);
                 default:
                     throw MiscellaneousUtils.CreateArgumentOutOfRangeException(nameof(token), token, "Unexpected token type.");
             }
@@ -768,7 +768,7 @@ namespace Newtonsoft.Json
             do
             {
                 // write a JValue date when the constructor is for a date
-                if (writeDateConstructorAsDate && reader.TokenType == JsonToken.StartConstructor && string.Equals(reader.Value.ToString(), "Date", StringComparison.Ordinal))
+                if (writeDateConstructorAsDate && reader.TokenType == JsonToken.StartConstructor && string.Equals(reader.Value?.ToString(), "Date", StringComparison.Ordinal))
                 {
                     await WriteConstructorDateAsync(reader, cancellationToken).ConfigureAwait(false);
                 }
@@ -801,7 +801,7 @@ namespace Newtonsoft.Json
             do
             {
                 // write a JValue date when the constructor is for a date
-                if (reader.TokenType == JsonToken.StartConstructor && string.Equals(reader.Value.ToString(), "Date", StringComparison.Ordinal))
+                if (reader.TokenType == JsonToken.StartConstructor && string.Equals(reader.Value?.ToString(), "Date", StringComparison.Ordinal))
                 {
                     WriteConstructorDate(reader);
                 }
@@ -929,7 +929,7 @@ namespace Newtonsoft.Json
         /// <returns>A <see cref="Task"/> that represents the asynchronous operation.</returns>
         /// <remarks>The default behaviour is to execute synchronously, returning an already-completed task. Derived
         /// classes can override this behaviour for true asynchronicity.</remarks>
-        public virtual Task WriteValueAsync(byte[] value, CancellationToken cancellationToken = default)
+        public virtual Task WriteValueAsync(byte[]? value, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -1290,7 +1290,7 @@ namespace Newtonsoft.Json
         /// <returns>A <see cref="Task"/> that represents the asynchronous operation.</returns>
         /// <remarks>The default behaviour is to execute synchronously, returning an already-completed task. Derived
         /// classes can override this behaviour for true asynchronicity.</remarks>
-        public virtual Task WriteValueAsync(object value, CancellationToken cancellationToken = default)
+        public virtual Task WriteValueAsync(object? value, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -1387,7 +1387,7 @@ namespace Newtonsoft.Json
         /// <returns>A <see cref="Task"/> that represents the asynchronous operation.</returns>
         /// <remarks>The default behaviour is to execute synchronously, returning an already-completed task. Derived
         /// classes can override this behaviour for true asynchronicity.</remarks>
-        public virtual Task WriteValueAsync(string value, CancellationToken cancellationToken = default)
+        public virtual Task WriteValueAsync(string? value, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -1524,7 +1524,7 @@ namespace Newtonsoft.Json
         /// <returns>A <see cref="Task"/> that represents the asynchronous operation.</returns>
         /// <remarks>The default behaviour is to execute synchronously, returning an already-completed task. Derived
         /// classes can override this behaviour for true asynchronicity.</remarks>
-        public virtual Task WriteValueAsync(Uri value, CancellationToken cancellationToken = default)
+        public virtual Task WriteValueAsync(Uri? value, CancellationToken cancellationToken = default)
         {
             if (cancellationToken.IsCancellationRequested)
             {
