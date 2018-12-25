@@ -106,7 +106,7 @@ namespace Newtonsoft.Json
             }
         }
 
-        internal NamingStrategy NamingStrategyInstance { get; set; }
+        internal NamingStrategy? NamingStrategyInstance { get; set; }
 
         // yuck. can't set nullable properties on an attribute in C#
         // have to use this approach to get an unset default state
@@ -114,8 +114,8 @@ namespace Newtonsoft.Json
         internal bool? _itemIsReference;
         internal ReferenceLoopHandling? _itemReferenceLoopHandling;
         internal TypeNameHandling? _itemTypeNameHandling;
-        private Type _namingStrategyType;
-        private object[] _namingStrategyParameters;
+        private? Type _namingStrategyType;
+        private object[]? _namingStrategyParameters;
 
         /// <summary>
         /// Gets or sets a value that indicates whether to preserve object references.

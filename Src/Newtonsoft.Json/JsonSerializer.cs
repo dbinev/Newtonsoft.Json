@@ -54,13 +54,13 @@ namespace Newtonsoft.Json
         internal DefaultValueHandling _defaultValueHandling;
         internal ConstructorHandling _constructorHandling;
         internal MetadataPropertyHandling _metadataPropertyHandling;
-        internal JsonConverterCollection _converters;
+        internal JsonConverterCollection? _converters;
         internal IContractResolver _contractResolver;
-        internal ITraceWriter _traceWriter;
-        internal IEqualityComparer _equalityComparer;
-        internal ISerializationBinder _serializationBinder;
+        internal ITraceWriter? _traceWriter;
+        internal IEqualityComparer? _equalityComparer;
+        internal ISerializationBinder? _serializationBinder;
         internal StreamingContext _context;
-        private IReferenceResolver _referenceResolver;
+        private IReferenceResolver? _referenceResolver;
 
         private Formatting? _formatting;
         private DateFormatHandling? _dateFormatHandling;
@@ -73,7 +73,7 @@ namespace Newtonsoft.Json
         private int? _maxDepth;
         private bool _maxDepthSet;
         private bool? _checkAdditionalContent;
-        private string _dateFormatString;
+        private string? _dateFormatString;
         private bool _dateFormatStringSet;
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Newtonsoft.Json
         /// Gets or sets the <see cref="SerializationBinder"/> used by the serializer when resolving type names.
         /// </summary>
         [Obsolete("Binder is obsolete. Use SerializationBinder instead.")]
-        public virtual SerializationBinder Binder
+        public virtual SerializationBinder? Binder
         {
             get
             {
@@ -137,7 +137,7 @@ namespace Newtonsoft.Json
         /// <summary>
         /// Gets or sets the <see cref="ISerializationBinder"/> used by the serializer when resolving type names.
         /// </summary>
-        public virtual ISerializationBinder SerializationBinder
+        public virtual ISerializationBinder? SerializationBinder
         {
             get => _serializationBinder;
             set
@@ -155,7 +155,7 @@ namespace Newtonsoft.Json
         /// Gets or sets the <see cref="ITraceWriter"/> used by the serializer when writing trace messages.
         /// </summary>
         /// <value>The trace writer.</value>
-        public virtual ITraceWriter TraceWriter
+        public virtual ITraceWriter? TraceWriter
         {
             get => _traceWriter;
             set => _traceWriter = value;
@@ -165,7 +165,7 @@ namespace Newtonsoft.Json
         /// Gets or sets the equality comparer used by the serializer when comparing references.
         /// </summary>
         /// <value>The equality comparer.</value>
-        public virtual IEqualityComparer EqualityComparer
+        public virtual IEqualityComparer? EqualityComparer
         {
             get => _equalityComparer;
             set => _equalityComparer = value;
@@ -830,7 +830,7 @@ namespace Newtonsoft.Json
 
             if (traceJsonReader != null)
             {
-                TraceWriter.Trace(TraceLevel.Verbose, traceJsonReader.GetDeserializedJsonMessage(), null);
+                TraceWriter!.Trace(TraceLevel.Verbose, traceJsonReader.GetDeserializedJsonMessage(), null);
             }
 
             ResetReader(reader, previousCulture, previousDateTimeZoneHandling, previousDateParseHandling, previousFloatParseHandling, previousMaxDepth, previousDateFormatString);
@@ -842,7 +842,7 @@ namespace Newtonsoft.Json
         /// <param name="reader">The <see cref="JsonReader"/> that contains the JSON structure to deserialize.</param>
         /// <returns>The <see cref="Object"/> being deserialized.</returns>
         [DebuggerStepThrough]
-        public object Deserialize(JsonReader reader)
+        public object? Deserialize(JsonReader reader)
         {
             return Deserialize(reader, null);
         }
@@ -855,7 +855,7 @@ namespace Newtonsoft.Json
         /// <param name="objectType">The <see cref="Type"/> of object being deserialized.</param>
         /// <returns>The instance of <paramref name="objectType"/> being deserialized.</returns>
         [DebuggerStepThrough]
-        public object Deserialize(TextReader reader, Type objectType)
+        public object? Deserialize(TextReader reader, Type objectType)
         {
             return Deserialize(new JsonTextReader(reader), objectType);
         }
@@ -886,7 +886,7 @@ namespace Newtonsoft.Json
             return DeserializeInternal(reader, objectType);
         }
 
-        internal virtual object DeserializeInternal(JsonReader reader, Type? objectType)
+        internal virtual object? DeserializeInternal(JsonReader reader, Type? objectType)
         {
             ValidationUtils.ArgumentNotNull(reader, nameof(reader));
 
@@ -904,11 +904,11 @@ namespace Newtonsoft.Json
                 : null;
 
             JsonSerializerInternalReader serializerReader = new JsonSerializerInternalReader(this);
-            object value = serializerReader.Deserialize(traceJsonReader ?? reader, objectType, CheckAdditionalContent);
+            object? value = serializerReader.Deserialize(traceJsonReader ?? reader, objectType, CheckAdditionalContent);
 
             if (traceJsonReader != null)
             {
-                TraceWriter.Trace(TraceLevel.Verbose, traceJsonReader.GetDeserializedJsonMessage(), null);
+                TraceWriter!.Trace(TraceLevel.Verbose, traceJsonReader.GetDeserializedJsonMessage(), null);
             }
 
             ResetReader(reader, previousCulture, previousDateTimeZoneHandling, previousDateParseHandling, previousFloatParseHandling, previousMaxDepth, previousDateFormatString);
@@ -1028,7 +1028,7 @@ namespace Newtonsoft.Json
         /// </summary>
         /// <param name="textWriter">The <see cref="TextWriter"/> used to write the JSON structure.</param>
         /// <param name="value">The <see cref="Object"/> to serialize.</param>
-        public void Serialize(TextWriter textWriter, object value)
+        public void Serialize(TextWriter textWriter, object? value)
         {
             Serialize(new JsonTextWriter(textWriter), value);
         }
@@ -1044,7 +1044,7 @@ namespace Newtonsoft.Json
         /// This parameter is used when <see cref="JsonSerializer.TypeNameHandling"/> is <see cref="Json.TypeNameHandling.Auto"/> to write out the type name if the type of the value does not match.
         /// Specifying the type is optional.
         /// </param>
-        public void Serialize(JsonWriter jsonWriter, object value, Type? objectType)
+        public void Serialize(JsonWriter jsonWriter, object? value, Type? objectType)
         {
             SerializeInternal(jsonWriter, value, objectType);
         }
@@ -1060,7 +1060,7 @@ namespace Newtonsoft.Json
         /// This parameter is used when <see cref="TypeNameHandling"/> is Auto to write out the type name if the type of the value does not match.
         /// Specifying the type is optional.
         /// </param>
-        public void Serialize(TextWriter textWriter, object value, Type objectType)
+        public void Serialize(TextWriter textWriter, object? value, Type objectType)
         {
             Serialize(new JsonTextWriter(textWriter), value, objectType);
         }
@@ -1071,7 +1071,7 @@ namespace Newtonsoft.Json
         /// </summary>
         /// <param name="jsonWriter">The <see cref="JsonWriter"/> used to write the JSON structure.</param>
         /// <param name="value">The <see cref="Object"/> to serialize.</param>
-        public void Serialize(JsonWriter jsonWriter, object value)
+        public void Serialize(JsonWriter jsonWriter, object? value)
         {
             SerializeInternal(jsonWriter, value, null);
         }
@@ -1087,7 +1087,7 @@ namespace Newtonsoft.Json
             return traceReader;
         }
 
-        internal virtual void SerializeInternal(JsonWriter jsonWriter, object value, Type? objectType)
+        internal virtual void SerializeInternal(JsonWriter jsonWriter, object? value, Type? objectType)
         {
             ValidationUtils.ArgumentNotNull(jsonWriter, nameof(jsonWriter));
 

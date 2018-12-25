@@ -41,6 +41,7 @@ using System.Globalization;
 using Newtonsoft.Json.Utilities.LinqBridge;
 #else
 using System.Linq;
+using System.Runtime.CompilerServices;
 #endif
 
 namespace Newtonsoft.Json.Linq
@@ -316,7 +317,7 @@ namespace Newtonsoft.Json.Linq
         /// Gets the <see cref="JToken"/> with the specified key.
         /// </summary>
         /// <value>The <see cref="JToken"/> with the specified key.</value>
-        public override JToken this[object key]
+        public override JToken? this[object key]
         {
             get
             {
@@ -346,7 +347,7 @@ namespace Newtonsoft.Json.Linq
         /// Gets or sets the <see cref="JToken"/> with the specified property name.
         /// </summary>
         /// <value></value>
-        public JToken this[string propertyName]
+        public JToken? this[string propertyName]
         {
             get
             {
@@ -553,7 +554,7 @@ namespace Newtonsoft.Json.Linq
         /// <param name="value">The value.</param>
         /// <param name="comparison">One of the enumeration values that specifies how the strings will be compared.</param>
         /// <returns><c>true</c> if a value was successfully retrieved; otherwise, <c>false</c>.</returns>
-        public bool TryGetValue(string propertyName, StringComparison comparison, out JToken? value)
+        public bool TryGetValue(string propertyName, StringComparison comparison, [NotNullWhenTrue]out JToken? value)
         {
             value = GetValue(propertyName, comparison);
             return (value != null);
@@ -607,7 +608,9 @@ namespace Newtonsoft.Json.Linq
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="value">The value.</param>
         /// <returns><c>true</c> if a value was successfully retrieved; otherwise, <c>false</c>.</returns>
-        public bool TryGetValue(string propertyName, out JToken? value)
+#pragma warning disable CS8614 // Nullability of reference types in type of parameter doesn't match implicitly implemented member.
+        public bool TryGetValue(string propertyName, [NotNullWhenTrue]out JToken? value)
+#pragma warning restore CS8614 // Nullability of reference types in type of parameter doesn't match implicitly implemented member.
         {
             JProperty? property = Property(propertyName);
             if (property == null)

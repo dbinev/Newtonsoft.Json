@@ -29,6 +29,7 @@ using System.Text;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json.Utilities;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace Newtonsoft.Json.Serialization
 {
@@ -129,9 +130,9 @@ namespace Newtonsoft.Json.Serialization
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns>A matching property if found.</returns>
-        public JsonProperty GetClosestMatchProperty(string propertyName)
+        public JsonProperty? GetClosestMatchProperty(string propertyName)
         {
-            JsonProperty property = GetProperty(propertyName, StringComparison.Ordinal);
+            JsonProperty? property = GetProperty(propertyName, StringComparison.Ordinal);
             if (property == null)
             {
                 property = GetProperty(propertyName, StringComparison.OrdinalIgnoreCase);
@@ -140,7 +141,7 @@ namespace Newtonsoft.Json.Serialization
             return property;
         }
 
-        private bool TryGetValue(string key, out JsonProperty item)
+        private bool TryGetValue(string key, [NotNullWhenTrue]out JsonProperty? item)
         {
             if (Dictionary == null)
             {
@@ -157,12 +158,12 @@ namespace Newtonsoft.Json.Serialization
         /// <param name="propertyName">The name of the property to get.</param>
         /// <param name="comparisonType">Type property name string comparison.</param>
         /// <returns>A matching property if found.</returns>
-        public JsonProperty GetProperty(string propertyName, StringComparison comparisonType)
+        public JsonProperty? GetProperty(string propertyName, StringComparison comparisonType)
         {
             // KeyedCollection has an ordinal comparer
             if (comparisonType == StringComparison.Ordinal)
             {
-                if (TryGetValue(propertyName, out JsonProperty property))
+                if (TryGetValue(propertyName, out JsonProperty? property))
                 {
                     return property;
                 }

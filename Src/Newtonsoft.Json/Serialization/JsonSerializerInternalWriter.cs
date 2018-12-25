@@ -41,6 +41,7 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json.Utilities.LinqBridge;
 #else
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 #endif
 
@@ -57,7 +58,7 @@ namespace Newtonsoft.Json.Serialization
         {
         }
 
-        public void Serialize(JsonWriter jsonWriter, object value, Type? objectType)
+        public void Serialize(JsonWriter jsonWriter, object? value, Type? objectType)
         {
             if (jsonWriter == null)
             {
@@ -73,7 +74,7 @@ namespace Newtonsoft.Json.Serialization
             {
                 if (ShouldWriteReference(value, null, contract, null, null))
                 {
-                    WriteReference(jsonWriter, value);
+                    WriteReference(jsonWriter, value!);
                 }
                 else
                 {
@@ -113,13 +114,18 @@ namespace Newtonsoft.Json.Serialization
             return InternalSerializer;
         }
 
-        private JsonContract? GetContractSafe(object value)
+        private JsonContract? GetContractSafe(object? value)
         {
             if (value == null)
             {
                 return null;
             }
 
+            return GetContract(value);
+        }
+
+        private JsonContract GetContract(object value)
+        {
             return Serializer._contractResolver.ResolveContract(value.GetType());
         }
 
@@ -153,17 +159,19 @@ namespace Newtonsoft.Json.Serialization
                 return;
             }
 
+            Debug.Assert(valueContract != null);
+
             JsonConverter? converter =
                 member?.Converter ??
                 containerProperty?.ItemConverter ??
                 containerContract?.ItemConverter ??
-                valueContract!.Converter ??
+                valueContract.Converter ??
                 Serializer.GetMatchingConverter(valueContract!.UnderlyingType) ??
                 valueContract.InternalConverter;
 
             if (converter != null && converter.CanWrite)
             {
-                SerializeConvertable(writer, converter, value, valueContract!, containerContract, containerProperty);
+                SerializeConvertable(writer, converter, value, valueContract, containerContract, containerProperty);
                 return;
             }
 
@@ -243,6 +251,9 @@ namespace Newtonsoft.Json.Serialization
             {
                 return false;
             }
+
+            Debug.Assert(valueContract != null);
+
             if (valueContract.ContractType == JsonContractType.Primitive || valueContract.ContractType == JsonContractType.String)
             {
                 return false;
@@ -286,9 +297,16 @@ namespace Newtonsoft.Json.Serialization
             return true;
         }
 
-        private bool CheckForCircularReference(JsonWriter writer, object? value, JsonProperty? property, JsonContract contract, JsonContainerContract? containerContract, JsonProperty? containerProperty)
+        private bool CheckForCircularReference(JsonWriter writer, object? value, JsonProperty? property, JsonContract? contract, JsonContainerContract? containerContract, JsonProperty? containerProperty)
         {
-            if (value == null || contract.ContractType == JsonContractType.Primitive || contract.ContractType == JsonContractType.String)
+            if (value == null)
+            {
+                return true;
+            }
+
+            Debug.Assert(contract != null);
+
+            if (contract.ContractType == JsonContractType.Primitive || contract.ContractType == JsonContractType.String)
             {
                 return true;
             }
@@ -376,7 +394,7 @@ namespace Newtonsoft.Json.Serialization
             }
         }
 
-        internal static bool TryConvertToString(object value, Type type, out string? s)
+        internal static bool TryConvertToString(object value, Type type, [NotNullWhenTrue]out string? s)
         {
 #if HAVE_TYPE_DESCRIPTOR
             if (JsonTypeReflector.CanTypeDescriptorConvertString(type, out TypeConverter converter))
@@ -449,7 +467,7 @@ namespace Newtonsoft.Json.Serialization
                 JsonProperty property = contract.Properties[index];
                 try
                 {
-                    if (!CalculatePropertyValues(writer, value, contract, member, property, out JsonContract memberContract, out object memberValue))
+                    if (!CalculatePropertyValues(writer, value, contract, member, property, out JsonContract? memberContract, out object? memberValue))
                     {
                         continue;
                     }
@@ -470,13 +488,13 @@ namespace Newtonsoft.Json.Serialization
                 }
             }
 
-            IEnumerable<KeyValuePair<object, object>> extensionData = contract.ExtensionDataGetter?.Invoke(value);
+            IEnumerable<KeyValuePair<object, object>>? extensionData = contract.ExtensionDataGetter?.Invoke(value);
             if (extensionData != null)
             {
-                foreach (KeyValuePair<object, object> e in extensionData)
+                foreach (KeyValuePair<object, object?> e in extensionData)
                 {
-                    JsonContract keyContract = GetContractSafe(e.Key);
-                    JsonContract valueContract = GetContractSafe(e.Value);
+                    JsonContract keyContract = GetContract(e.Key);
+                    JsonContract? valueContract = GetContractSafe(e.Value);
 
                     string propertyName = GetPropertyName(writer, e.Key, keyContract, out _);
 
@@ -487,7 +505,7 @@ namespace Newtonsoft.Json.Serialization
                     if (ShouldWriteReference(e.Value, null, valueContract, contract, member))
                     {
                         writer.WritePropertyName(propertyName);
-                        WriteReference(writer, e.Value);
+                        WriteReference(writer, e.Value!);
                     }
                     else
                     {
@@ -510,7 +528,7 @@ namespace Newtonsoft.Json.Serialization
             OnSerialized(writer, contract, value);
         }
 
-        private bool CalculatePropertyValues(JsonWriter writer, object value, JsonContainerContract contract, JsonProperty? member, JsonProperty property, out JsonContract? memberContract, out object? memberValue)
+        private bool CalculatePropertyValues(JsonWriter writer, object value, JsonContainerContract contract, JsonProperty? member, JsonProperty property, [NotNullWhenTrue]out JsonContract? memberContract, [NotNullWhenTrue]out object? memberValue)
         {
             if (!property.Ignored && property.Readable && ShouldSerialize(writer, property, value) && IsSpecified(writer, property, value))
             {
@@ -894,7 +912,7 @@ namespace Newtonsoft.Json.Serialization
                 {
                     try
                     {
-                        if (!CalculatePropertyValues(writer, value, contract, member, property, out JsonContract memberContract, out object memberValue))
+                        if (!CalculatePropertyValues(writer, value, contract, member, property, out JsonContract? memberContract, out object? memberValue))
                         {
                             continue;
                         }
@@ -1149,7 +1167,7 @@ namespace Newtonsoft.Json.Serialization
                     {
                         escape = true;
 
-                        if (primitiveContract.IsEnum && EnumUtils.TryToString(primitiveContract.NonNullableUnderlyingType, name, null, out string enumName))
+                        if (primitiveContract.IsEnum && EnumUtils.TryToString(primitiveContract.NonNullableUnderlyingType, name, null, out string? enumName))
                         {
                             return enumName;
                         }
@@ -1158,7 +1176,7 @@ namespace Newtonsoft.Json.Serialization
                     }
                 }
             }
-            else if (TryConvertToString(name, name.GetType(), out string propertyName))
+            else if (TryConvertToString(name, name.GetType(), out string? propertyName))
             {
                 escape = true;
                 return propertyName;

@@ -200,13 +200,13 @@ namespace Newtonsoft.Json.Serialization
         /// <param name="converterType">The <see cref="JsonConverter"/> type to create.</param>
         /// <param name="args">Optional arguments to pass to an initializing constructor of the JsonConverter.
         /// If <c>null</c>, the default constructor is used.</param>
-        public static JsonConverter CreateJsonConverterInstance(Type converterType, object[] args)
+        public static JsonConverter CreateJsonConverterInstance(Type converterType, object[]? args)
         {
             Func<object[]?, object> converterCreator = CreatorCache.Get(converterType);
             return (JsonConverter)converterCreator(args);
         }
 
-        public static NamingStrategy CreateNamingStrategyInstance(Type namingStrategyType, object[] args)
+        public static NamingStrategy CreateNamingStrategyInstance(Type namingStrategyType, object[]? args)
         {
             Func<object[]?, object> converterCreator = CreatorCache.Get(namingStrategyType);
             return (NamingStrategy)converterCreator(args);

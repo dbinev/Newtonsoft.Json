@@ -36,6 +36,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Newtonsoft.Json.Serialization;
+using System.Runtime.CompilerServices;
 
 namespace Newtonsoft.Json.Utilities
 {
@@ -124,7 +125,7 @@ namespace Newtonsoft.Json.Utilities
             return TryToString(enumType, value, camelCase ? _camelCaseNamingStrategy : null, out name);
         }
 
-        public static bool TryToString(Type enumType, object value, NamingStrategy? namingStrategy, out string? name)
+        public static bool TryToString(Type enumType, object value, NamingStrategy? namingStrategy, [NotNullWhenTrue]out string? name)
         {
             EnumInfo enumInfo = ValuesAndNamesPerEnum.Get(new StructMultiKey<Type, NamingStrategy?>(enumType, namingStrategy));
             ulong v = ToUInt64(value);

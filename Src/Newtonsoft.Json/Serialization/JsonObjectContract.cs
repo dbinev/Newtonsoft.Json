@@ -85,13 +85,13 @@ namespace Newtonsoft.Json.Serialization
         /// This function is called with a collection of arguments which are defined by the <see cref="JsonObjectContract.CreatorParameters"/> collection.
         /// </summary>
         /// <value>The function used to create the object.</value>
-        public ObjectConstructor<object> OverrideCreator
+        public ObjectConstructor<object>? OverrideCreator
         {
             get => _overrideCreator;
             set => _overrideCreator = value;
         }
 
-        internal ObjectConstructor<object> ParameterizedCreator
+        internal ObjectConstructor<object>? ParameterizedCreator
         {
             get => _parameterizedCreator;
             set => _parameterizedCreator = value;
@@ -100,12 +100,12 @@ namespace Newtonsoft.Json.Serialization
         /// <summary>
         /// Gets or sets the extension data setter.
         /// </summary>
-        public ExtensionDataSetter ExtensionDataSetter { get; set; }
+        public ExtensionDataSetter? ExtensionDataSetter { get; set; }
 
         /// <summary>
         /// Gets or sets the extension data getter.
         /// </summary>
-        public ExtensionDataGetter ExtensionDataGetter { get; set; }
+        public ExtensionDataGetter? ExtensionDataGetter { get; set; }
 
         /// <summary>
         /// Gets or sets the extension data value type.

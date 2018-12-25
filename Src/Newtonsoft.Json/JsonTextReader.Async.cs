@@ -34,6 +34,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Utilities;
+using System.Diagnostics;
 
 namespace Newtonsoft.Json
 {
@@ -110,6 +111,8 @@ namespace Newtonsoft.Json
 
         private async Task<bool> ParsePostValueAsync(bool ignoreComments, CancellationToken cancellationToken)
         {
+            Debug.Assert(_chars != null);
+
             while (true)
             {
                 char currentChar = _chars[_charPos];
@@ -193,6 +196,8 @@ namespace Newtonsoft.Json
 
         private async Task<bool> ReadFromFinishedAsync(CancellationToken cancellationToken)
         {
+            Debug.Assert(_chars != null);
+
             if (await EnsureCharsAsync(0, false, cancellationToken).ConfigureAwait(false))
             {
                 await EatWhitespaceAsync(cancellationToken).ConfigureAwait(false);
@@ -222,6 +227,8 @@ namespace Newtonsoft.Json
 
         private async Task<int> ReadDataAsync(bool append, int charsRequired, CancellationToken cancellationToken)
         {
+            Debug.Assert(_chars != null);
+
             if (_isEndOfFile)
             {
                 return 0;
@@ -244,6 +251,8 @@ namespace Newtonsoft.Json
 
         private async Task<bool> ParseValueAsync(CancellationToken cancellationToken)
         {
+            Debug.Assert(_chars != null);
+
             while (true)
             {
                 char currentChar = _chars[_charPos];
@@ -373,6 +382,8 @@ namespace Newtonsoft.Json
 
         private async Task ReadStringIntoBufferAsync(char quote, CancellationToken cancellationToken)
         {
+            Debug.Assert(_chars != null);
+
             int charPos = _charPos;
             int initialPosition = _charPos;
             int lastWritePosition = _charPos;
@@ -589,6 +600,8 @@ namespace Newtonsoft.Json
 
         private async Task<bool> ParseObjectAsync(CancellationToken cancellationToken)
         {
+            Debug.Assert(_chars != null);
+
             while (true)
             {
                 char currentChar = _chars[_charPos];
@@ -646,6 +659,8 @@ namespace Newtonsoft.Json
 
         private async Task ParseCommentAsync(bool setToken, CancellationToken cancellationToken)
         {
+            Debug.Assert(_chars != null);
+
             // should have already parsed / character before reaching this method
             _charPos++;
 
@@ -742,6 +757,8 @@ namespace Newtonsoft.Json
 
         private async Task EatWhitespaceAsync(CancellationToken cancellationToken)
         {
+            Debug.Assert(_chars != null);
+
             while (true)
             {
                 char currentChar = _chars[_charPos];
@@ -798,6 +815,8 @@ namespace Newtonsoft.Json
 
         private async Task<bool> MatchValueWithTrailingSeparatorAsync(string value, CancellationToken cancellationToken)
         {
+            Debug.Assert(_chars != null);
+
             // will match value and then move to the next character, checking that it is a separator character
             if (!await MatchValueAsync(value, cancellationToken).ConfigureAwait(false))
             {
@@ -841,6 +860,8 @@ namespace Newtonsoft.Json
 
         private async Task ParseConstructorAsync(CancellationToken cancellationToken)
         {
+            Debug.Assert(_chars != null);
+
             if (await MatchValueWithTrailingSeparatorAsync("new", cancellationToken).ConfigureAwait(false))
             {
                 await EatWhitespaceAsync(cancellationToken).ConfigureAwait(false);
@@ -939,6 +960,8 @@ namespace Newtonsoft.Json
 
         private async Task ParseNumberAsync(ReadType readType, CancellationToken cancellationToken)
         {
+            Debug.Assert(_chars != null);
+
             ShiftBufferIfNeeded();
 
             char firstChar = _chars[_charPos];
@@ -956,6 +979,8 @@ namespace Newtonsoft.Json
 
         private async Task<bool> ParsePropertyAsync(CancellationToken cancellationToken)
         {
+            Debug.Assert(_chars != null);
+
             char firstChar = _chars[_charPos];
             char quoteChar;
 
@@ -1008,6 +1033,8 @@ namespace Newtonsoft.Json
 
         private async Task ReadNumberIntoBufferAsync(CancellationToken cancellationToken)
         {
+            Debug.Assert(_chars != null);
+
             int charPos = _charPos;
 
             while (true)
@@ -1042,6 +1069,8 @@ namespace Newtonsoft.Json
 
         private async Task ParseUnquotedPropertyAsync(CancellationToken cancellationToken)
         {
+            Debug.Assert(_chars != null);
+
             int initialPosition = _charPos;
 
             // parse unquoted property name until whitespace or colon
@@ -1091,6 +1120,8 @@ namespace Newtonsoft.Json
 
         private async Task HandleNullAsync(CancellationToken cancellationToken)
         {
+            Debug.Assert(_chars != null);
+
             if (await EnsureCharsAsync(1, true, cancellationToken).ConfigureAwait(false))
             {
                 if (_chars[_charPos + 1] == 'u')
@@ -1109,6 +1140,8 @@ namespace Newtonsoft.Json
 
         private async Task ReadFinishedAsync(CancellationToken cancellationToken)
         {
+            Debug.Assert(_chars != null);
+
             if (await EnsureCharsAsync(0, false, cancellationToken).ConfigureAwait(false))
             {
                 await EatWhitespaceAsync(cancellationToken).ConfigureAwait(false);
@@ -1134,6 +1167,7 @@ namespace Newtonsoft.Json
         private async Task<object?> ReadStringValueAsync(ReadType readType, CancellationToken cancellationToken)
         {
             EnsureBuffer();
+            Debug.Assert(_chars != null);
 
             switch (_currentState)
             {
@@ -1269,6 +1303,7 @@ namespace Newtonsoft.Json
         private async Task<object?> ReadNumberValueAsync(ReadType readType, CancellationToken cancellationToken)
         {
             EnsureBuffer();
+            Debug.Assert(_chars != null);
 
             switch (_currentState)
             {
@@ -1395,6 +1430,7 @@ namespace Newtonsoft.Json
         internal async Task<bool?> DoReadAsBooleanAsync(CancellationToken cancellationToken)
         {
             EnsureBuffer();
+            Debug.Assert(_chars != null);
 
             switch (_currentState)
             {
@@ -1530,6 +1566,8 @@ namespace Newtonsoft.Json
         internal async Task<byte[]?> DoReadAsBytesAsync(CancellationToken cancellationToken)
         {
             EnsureBuffer();
+            Debug.Assert(_chars != null);
+
             bool isWrapped = false;
 
             switch (_currentState)

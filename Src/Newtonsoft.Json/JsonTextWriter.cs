@@ -43,15 +43,15 @@ namespace Newtonsoft.Json
     {
         private const int IndentCharBufferSize = 12;
         private readonly TextWriter _writer;
-        private Base64Encoder _base64Encoder;
+        private Base64Encoder? _base64Encoder;
         private char _indentChar;
         private int _indentation;
         private char _quoteChar;
         private bool _quoteName;
-        private bool[] _charEscapeFlags;
-        private char[] _writeBuffer;
-        private IArrayPool<char> _arrayPool;
-        private char[] _indentChars;
+        private bool[]? _charEscapeFlags;
+        private char[]? _writeBuffer;
+        private IArrayPool<char>? _arrayPool;
+        private char[]? _indentChars;
 
         private Base64Encoder Base64Encoder
         {

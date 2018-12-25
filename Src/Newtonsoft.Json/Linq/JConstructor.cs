@@ -154,7 +154,7 @@ namespace Newtonsoft.Json.Linq
         /// <param name="converters">A collection of <see cref="JsonConverter"/> which will be used when writing the token.</param>
         public override void WriteTo(JsonWriter writer, params JsonConverter[] converters)
         {
-            writer.WriteStartConstructor(_name);
+            writer.WriteStartConstructor(_name!);
 
             int count = _values.Count;
             for (int i = 0; i < count; i++)
@@ -197,7 +197,7 @@ namespace Newtonsoft.Json.Linq
 
         internal override int GetDeepHashCode()
         {
-            return _name.GetHashCode() ^ ContentsHashCode();
+            return (_name?.GetHashCode() ?? 0) ^ ContentsHashCode();
         }
 
         /// <summary>

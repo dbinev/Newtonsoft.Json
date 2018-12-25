@@ -35,6 +35,7 @@ using System.Diagnostics;
 using Newtonsoft.Json.Utilities.LinqBridge;
 #else
 using System.Linq;
+using System.Runtime.CompilerServices;
 #endif
 
 namespace Newtonsoft.Json.Utilities
@@ -565,7 +566,7 @@ namespace Newtonsoft.Json.Utilities
         }
 #endif
 
-        public static bool TryGetDateFromConstructorJson(JsonReader reader, out DateTime dateTime, out string? errorMessage)
+        public static bool TryGetDateFromConstructorJson(JsonReader reader, out DateTime dateTime, [NotNullWhenFalse]out string? errorMessage)
         {
             dateTime = default;
             errorMessage = null;

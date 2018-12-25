@@ -149,7 +149,7 @@ namespace Newtonsoft.Json.Converters
         {
             XmlNodeWrapper xmlAttributeWrapper = (XmlNodeWrapper)attribute;
 
-            _element.SetAttributeNode((XmlAttribute)xmlAttributeWrapper.WrappedNode);
+            _element.SetAttributeNode((XmlAttribute)xmlAttributeWrapper.WrappedNode!);
         }
 
         public string GetPrefixOfNamespace(string namespaceUri)
@@ -520,7 +520,7 @@ namespace Newtonsoft.Json.Converters
             return new XDeclarationWrapper(new XDeclaration(version, encoding, standalone));
         }
 
-        public IXmlNode CreateXmlDocumentType(string name, string publicId, string systemId, string internalSubset)
+        public IXmlNode CreateXmlDocumentType(string? name, string? publicId, string? systemId, string? internalSubset)
         {
             return new XDocumentTypeWrapper(new XDocumentType(name, publicId, systemId, internalSubset));
         }
@@ -989,7 +989,7 @@ namespace Newtonsoft.Json.Converters
         /// <param name="writer">The <see cref="JsonWriter"/> to write to.</param>
         /// <param name="serializer">The calling serializer.</param>
         /// <param name="value">The value.</param>
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
         {
             if (value == null)
             {
@@ -1037,7 +1037,7 @@ namespace Newtonsoft.Json.Converters
         {
             List<IXmlNode>? parentElements = null;
 
-            IXmlNode parent = node;
+            IXmlNode? parent = node;
             while ((parent = parent.ParentNode) != null)
             {
                 if (parent.NodeType == XmlNodeType.Element)
@@ -1477,7 +1477,7 @@ namespace Newtonsoft.Json.Converters
         /// <param name="existingValue">The existing value of object being read.</param>
         /// <param name="serializer">The calling serializer.</param>
         /// <returns>The object value.</returns>
-        public override object? ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
         {
             switch (reader.TokenType)
             {
@@ -1633,7 +1633,7 @@ namespace Newtonsoft.Json.Converters
                 if (propertyName.StartsWith('@'))
                 {
                     string attributeName = propertyName.Substring(1);
-                    string attributePrefix = MiscellaneousUtils.GetPrefix(attributeName);
+                    string? attributePrefix = MiscellaneousUtils.GetPrefix(attributeName);
 
                     AddAttribute(reader, document, currentNode, propertyName, attributeName, manager, attributePrefix);
                     return;
@@ -1682,7 +1682,7 @@ namespace Newtonsoft.Json.Converters
                 foreach (KeyValuePair<string, string> nameValue in attributeNameValues)
                 {
                     string encodedName = XmlConvert.EncodeName(nameValue.Key);
-                    string attributePrefix = MiscellaneousUtils.GetPrefix(nameValue.Key);
+                    string? attributePrefix = MiscellaneousUtils.GetPrefix(nameValue.Key);
 
                     IXmlNode attribute = (!string.IsNullOrEmpty(attributePrefix)) ? document.CreateAttribute(encodedName, manager.LookupNamespace(attributePrefix) ?? string.Empty, nameValue.Value) : document.CreateAttribute(encodedName, nameValue.Value);
 
@@ -1796,7 +1796,7 @@ namespace Newtonsoft.Json.Converters
 
         private void ReadArrayElements(JsonReader reader, IXmlDocument document, string propertyName, IXmlNode currentNode, XmlNamespaceManager manager)
         {
-            string elementPrefix = MiscellaneousUtils.GetPrefix(propertyName);
+            string? elementPrefix = MiscellaneousUtils.GetPrefix(propertyName);
 
             IXmlElement nestedArrayElement = CreateElement(propertyName, document, elementPrefix, manager);
 
@@ -2090,7 +2090,7 @@ namespace Newtonsoft.Json.Converters
 
                             if (count == 1 && WriteArrayAttribute)
                             {
-                                MiscellaneousUtils.GetQualifiedNameParts(propertyName, out string elementPrefix, out string localName);
+                                MiscellaneousUtils.GetQualifiedNameParts(propertyName, out string? elementPrefix, out string localName);
                                 string ns = string.IsNullOrEmpty(elementPrefix) ? manager.DefaultNamespace : manager.LookupNamespace(elementPrefix);
 
                                 foreach (IXmlNode childNode in currentNode.ChildNodes)
@@ -2135,7 +2135,7 @@ namespace Newtonsoft.Json.Converters
         /// <param name="attributeName">Attribute name to test.</param>
         /// <param name="prefix">The attribute name prefix if it has one, otherwise an empty string.</param>
         /// <returns><c>true</c> if attribute name is for a namespace attribute, otherwise <c>false</c>.</returns>
-        private bool IsNamespaceAttribute(string attributeName, out string? prefix)
+        private bool IsNamespaceAttribute(string attributeName, [NotNullWhenTrue]out string? prefix)
         {
             if (attributeName.StartsWith("xmlns", StringComparison.Ordinal))
             {

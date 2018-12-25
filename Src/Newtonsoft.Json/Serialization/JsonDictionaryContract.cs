@@ -59,7 +59,7 @@ namespace Newtonsoft.Json.Serialization
         /// <value>The <see cref="System.Type"/> of the dictionary values.</value>
         public Type DictionaryValueType { get; }
 
-        internal JsonContract KeyContract { get; set; }
+        internal JsonContract? KeyContract { get; set; }
 
         private readonly Type? _genericCollectionDefinitionType;
 
@@ -115,8 +115,8 @@ namespace Newtonsoft.Json.Serialization
         {
             ContractType = JsonContractType.Dictionary;
 
-            Type keyType;
-            Type valueType;
+            Type? keyType;
+            Type? valueType;
 
             if (ReflectionUtils.ImplementsGenericDefinition(underlyingType, typeof(IDictionary<,>), out _genericCollectionDefinitionType))
             {

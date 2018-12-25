@@ -107,9 +107,9 @@ namespace Newtonsoft.Json.Utilities
             return 0;
         }
 
-        public static string GetPrefix(string qualifiedName)
+        public static string? GetPrefix(string qualifiedName)
         {
-            GetQualifiedNameParts(qualifiedName, out string prefix, out _);
+            GetQualifiedNameParts(qualifiedName, out string? prefix, out _);
 
             return prefix;
         }

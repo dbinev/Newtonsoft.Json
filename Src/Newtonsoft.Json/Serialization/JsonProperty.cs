@@ -243,25 +243,25 @@ namespace Newtonsoft.Json.Serialization
         /// Gets or sets a predicate used to determine whether the property should be serialized.
         /// </summary>
         /// <value>A predicate used to determine whether the property should be serialized.</value>
-        public Predicate<object> ShouldSerialize { get; set; }
+        public Predicate<object>? ShouldSerialize { get; set; }
 
         /// <summary>
         /// Gets or sets a predicate used to determine whether the property should be deserialized.
         /// </summary>
         /// <value>A predicate used to determine whether the property should be deserialized.</value>
-        public Predicate<object> ShouldDeserialize { get; set; }
+        public Predicate<object>? ShouldDeserialize { get; set; }
 
         /// <summary>
         /// Gets or sets a predicate used to determine whether the property should be serialized.
         /// </summary>
         /// <value>A predicate used to determine whether the property should be serialized.</value>
-        public Predicate<object> GetIsSpecified { get; set; }
+        public Predicate<object>? GetIsSpecified { get; set; }
 
         /// <summary>
         /// Gets or sets an action used to set whether the property has been deserialized.
         /// </summary>
         /// <value>An action used to set whether the property has been deserialized.</value>
-        public Action<object, object> SetIsSpecified { get; set; }
+        public Action<object, object>? SetIsSpecified { get; set; }
 
         /// <summary>
         /// Returns a <see cref="String"/> that represents this instance.

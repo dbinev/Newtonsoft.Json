@@ -49,7 +49,7 @@ namespace Newtonsoft.Json.Serialization
         /// Gets the <see cref="System.Type"/> of the collection items.
         /// </summary>
         /// <value>The <see cref="System.Type"/> of the collection items.</value>
-        public Type CollectionItemType { get; }
+        public Type? CollectionItemType { get; }
 
         /// <summary>
         /// Gets a value indicating whether the collection type is a multidimensional array.
@@ -57,7 +57,7 @@ namespace Newtonsoft.Json.Serialization
         /// <value><c>true</c> if the collection type is a multidimensional array; otherwise, <c>false</c>.</value>
         public bool IsMultidimensionalArray { get; }
 
-        private readonly Type _genericCollectionDefinitionType;
+        private readonly Type? _genericCollectionDefinitionType;
 
         private Type _genericWrapperType;
         private ObjectConstructor<object> _genericWrapperCreator;
@@ -120,7 +120,7 @@ namespace Newtonsoft.Json.Serialization
 
             bool canDeserialize;
 
-            Type tempCollectionType;
+            Type? tempCollectionType;
             if (IsArray)
             {
                 CollectionItemType = ReflectionUtils.GetCollectionItemType(UnderlyingType);
@@ -254,8 +254,8 @@ namespace Newtonsoft.Json.Serialization
             if (ImmutableCollectionsUtils.TryBuildImmutableForArrayContract(
                 underlyingType,
                 CollectionItemType,
-                out Type immutableCreatedType,
-                out ObjectConstructor<object> immutableParameterizedCreator))
+                out Type? immutableCreatedType,
+                out ObjectConstructor<object>? immutableParameterizedCreator))
             {
                 CreatedType = immutableCreatedType;
                 _parameterizedCreator = immutableParameterizedCreator;

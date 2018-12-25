@@ -507,12 +507,7 @@ namespace Newtonsoft.Json.Linq.JsonPath
                     right = ParseSide();
                 }
 
-                BooleanQueryExpression booleanExpression = new BooleanQueryExpression
-                {
-                    Left = left,
-                    Operator = op,
-                    Right = right
-                };
+                BooleanQueryExpression booleanExpression = new BooleanQueryExpression(op, left, right);
 
                 if (_expression[_currentIndex] == ')')
                 {
@@ -533,7 +528,7 @@ namespace Newtonsoft.Json.Linq.JsonPath
 
                     if (parentExpression == null || parentExpression.Operator != QueryOperator.And)
                     {
-                        CompositeExpression andExpression = new CompositeExpression { Operator = QueryOperator.And };
+                        CompositeExpression andExpression = new CompositeExpression(QueryOperator.And);
 
                         parentExpression?.Expressions.Add(andExpression);
 
@@ -556,7 +551,7 @@ namespace Newtonsoft.Json.Linq.JsonPath
 
                     if (parentExpression == null || parentExpression.Operator != QueryOperator.Or)
                     {
-                        CompositeExpression orExpression = new CompositeExpression { Operator = QueryOperator.Or };
+                        CompositeExpression orExpression = new CompositeExpression(QueryOperator.Or);
 
                         parentExpression?.Expressions.Add(orExpression);
 

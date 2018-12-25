@@ -168,7 +168,7 @@ namespace Newtonsoft.Json.Serialization
         /// Gets or sets the naming strategy used to resolve how property names and dictionary keys are serialized.
         /// </summary>
         /// <value>The naming strategy used to resolve how property names and dictionary keys are serialized.</value>
-        public NamingStrategy NamingStrategy { get; set; }
+        public NamingStrategy? NamingStrategy { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DefaultContractResolver"/> class.
@@ -241,7 +241,7 @@ namespace Newtonsoft.Json.Serialization
             if (memberSerialization != MemberSerialization.Fields)
             {
 #if HAVE_DATA_CONTRACTS
-                DataContractAttribute dataContractAttribute = JsonTypeReflector.GetDataContractAttribute(objectType);
+                DataContractAttribute? dataContractAttribute = JsonTypeReflector.GetDataContractAttribute(objectType);
 #endif
 
 #pragma warning disable 618
@@ -349,9 +349,9 @@ namespace Newtonsoft.Json.Serialization
             contract.MemberSerialization = JsonTypeReflector.GetObjectMemberSerialization(contract.NonNullableUnderlyingType, ignoreSerializableAttribute);
             contract.Properties.AddRange(CreateProperties(contract.NonNullableUnderlyingType, contract.MemberSerialization));
 
-            Func<string, string> extensionDataNameResolver = null;
+            Func<string, string>? extensionDataNameResolver = null;
 
-            JsonObjectAttribute attribute = JsonTypeReflector.GetCachedAttribute<JsonObjectAttribute>(contract.NonNullableUnderlyingType);
+            JsonObjectAttribute? attribute = JsonTypeReflector.GetCachedAttribute<JsonObjectAttribute>(contract.NonNullableUnderlyingType);
             if (attribute != null)
             {
                 contract.ItemRequired = attribute._itemRequired;
@@ -359,7 +359,7 @@ namespace Newtonsoft.Json.Serialization
 
                 if (attribute.NamingStrategyType != null)
                 {
-                    NamingStrategy namingStrategy = JsonTypeReflector.GetContainerNamingStrategy(attribute);
+                    NamingStrategy namingStrategy = JsonTypeReflector.GetContainerNamingStrategy(attribute)!;
                     extensionDataNameResolver = s => namingStrategy.GetDictionaryKey(s);
                 }
             }
@@ -373,7 +373,7 @@ namespace Newtonsoft.Json.Serialization
 
             if (contract.IsInstantiable)
             {
-                ConstructorInfo overrideConstructor = GetAttributeConstructor(contract.NonNullableUnderlyingType);
+                ConstructorInfo? overrideConstructor = GetAttributeConstructor(contract.NonNullableUnderlyingType);
 
                 // check if a JsonConstructorAttribute has been defined and use that
                 if (overrideConstructor != null)
@@ -394,7 +394,7 @@ namespace Newtonsoft.Json.Serialization
                 }
                 else if (contract.DefaultCreator == null || contract.DefaultCreatorNonPublic)
                 {
-                    ConstructorInfo constructor = GetParameterizedConstructor(contract.NonNullableUnderlyingType);
+                    ConstructorInfo? constructor = GetParameterizedConstructor(contract.NonNullableUnderlyingType);
                     if (constructor != null)
                     {
                         contract.ParameterizedCreator = JsonTypeReflector.ReflectionDelegateFactory.CreateParameterizedConstructor(constructor);
@@ -405,7 +405,7 @@ namespace Newtonsoft.Json.Serialization
                 {
                     // value types always have default constructor
                     // check whether there is a constructor that matches with non-writable properties on value type
-                    ConstructorInfo constructor = GetImmutableConstructor(contract.NonNullableUnderlyingType, contract.Properties);
+                    ConstructorInfo? constructor = GetImmutableConstructor(contract.NonNullableUnderlyingType, contract.Properties);
                     if (constructor != null)
                     {
                         contract.OverrideCreator = JsonTypeReflector.ReflectionDelegateFactory.CreateParameterizedConstructor(constructor);
@@ -467,7 +467,7 @@ namespace Newtonsoft.Json.Serialization
 
                 Type t = ReflectionUtils.GetMemberUnderlyingType(m);
 
-                if (ReflectionUtils.ImplementsGenericDefinition(t, typeof(IDictionary<,>), out Type dictionaryType))
+                if (ReflectionUtils.ImplementsGenericDefinition(t, typeof(IDictionary<,>), out Type? dictionaryType))
                 {
                     Type keyType = dictionaryType.GetGenericArguments()[0];
                     Type valueType = dictionaryType.GetGenericArguments()[1];
@@ -496,8 +496,8 @@ namespace Newtonsoft.Json.Serialization
 
             ReflectionUtils.ImplementsGenericDefinition(t, typeof(IDictionary<,>), out Type? dictionaryType);
 
-            Type keyType = dictionaryType.GetGenericArguments()[0];
-            Type valueType = dictionaryType.GetGenericArguments()[1];
+            Type keyType = dictionaryType!.GetGenericArguments()[0];
+            Type valueType = dictionaryType!.GetGenericArguments()[1];
 
             Type createdType;
 
@@ -511,7 +511,7 @@ namespace Newtonsoft.Json.Serialization
                 createdType = t;
             }
 
-            Func<object, object> getExtensionDataDictionary = JsonTypeReflector.ReflectionDelegateFactory.CreateGet<object>(member);
+            Func<object, object?> getExtensionDataDictionary = JsonTypeReflector.ReflectionDelegateFactory.CreateGet<object>(member);
 
             if (extensionDataAttribute.ReadData)
             {
@@ -524,14 +524,14 @@ namespace Newtonsoft.Json.Serialization
                 {
                     // Item is explicitly implemented and non-public
                     // get from dictionary interface
-                    setMethod = dictionaryType.GetProperty("Item", BindingFlags.Public | BindingFlags.Instance, null, valueType, new[] { keyType }, null)?.GetSetMethod();
+                    setMethod = dictionaryType!.GetProperty("Item", BindingFlags.Public | BindingFlags.Instance, null, valueType, new[] { keyType }, null)?.GetSetMethod();
                 }
 
-                MethodCall<object, object> setExtensionDataDictionaryValue = JsonTypeReflector.ReflectionDelegateFactory.CreateMethodCall<object>(setMethod!);
+                MethodCall<object, object?> setExtensionDataDictionaryValue = JsonTypeReflector.ReflectionDelegateFactory.CreateMethodCall<object>(setMethod!);
 
                 ExtensionDataSetter extensionDataSetter = (o, key, value) =>
                 {
-                    object dictionary = getExtensionDataDictionary(o);
+                    object? dictionary = getExtensionDataDictionary(o);
                     if (dictionary == null)
                     {
                         if (setExtensionDataDictionary == null)
@@ -557,7 +557,7 @@ namespace Newtonsoft.Json.Serialization
 
                 ExtensionDataGetter extensionDataGetter = o =>
                 {
-                    object dictionary = getExtensionDataDictionary(o);
+                    object? dictionary = getExtensionDataDictionary(o);
                     if (dictionary == null)
                     {
                         return null;
@@ -588,7 +588,7 @@ namespace Newtonsoft.Json.Serialization
             {
                 foreach (KeyValuePair<TEnumeratorKey, TEnumeratorValue> item in _e)
                 {
-                    yield return new KeyValuePair<object, object>(item.Key, item.Value);
+                    yield return new KeyValuePair<object, object>(item.Key!, item.Value!);
                 }
             }
 
@@ -890,31 +890,41 @@ namespace Newtonsoft.Json.Serialization
                     if (!skipSerializing && IsValidCallback(method, parameters, typeof(OnSerializingAttribute), currentOnSerializing, ref prevAttributeType))
                     {
                         onSerializing = onSerializing ?? new List<SerializationCallback>();
+#pragma warning disable CS8602 // Possible dereference of a null reference.
                         onSerializing.Add(JsonContract.CreateSerializationCallback(method));
+#pragma warning restore CS8602 // Possible dereference of a null reference.
                         currentOnSerializing = method;
                     }
                     if (IsValidCallback(method, parameters, typeof(OnSerializedAttribute), currentOnSerialized, ref prevAttributeType))
                     {
                         onSerialized = onSerialized ?? new List<SerializationCallback>();
+#pragma warning disable CS8602 // Possible dereference of a null reference.
                         onSerialized.Add(JsonContract.CreateSerializationCallback(method));
+#pragma warning restore CS8602 // Possible dereference of a null reference.
                         currentOnSerialized = method;
                     }
                     if (IsValidCallback(method, parameters, typeof(OnDeserializingAttribute), currentOnDeserializing, ref prevAttributeType))
                     {
                         onDeserializing = onDeserializing ?? new List<SerializationCallback>();
+#pragma warning disable CS8602 // Possible dereference of a null reference.
                         onDeserializing.Add(JsonContract.CreateSerializationCallback(method));
+#pragma warning restore CS8602 // Possible dereference of a null reference.
                         currentOnDeserializing = method;
                     }
                     if (!skipDeserialized && IsValidCallback(method, parameters, typeof(OnDeserializedAttribute), currentOnDeserialized, ref prevAttributeType))
                     {
                         onDeserialized = onDeserialized ?? new List<SerializationCallback>();
+#pragma warning disable CS8602 // Possible dereference of a null reference.
                         onDeserialized.Add(JsonContract.CreateSerializationCallback(method));
+#pragma warning restore CS8602 // Possible dereference of a null reference.
                         currentOnDeserialized = method;
                     }
                     if (IsValidCallback(method, parameters, typeof(OnErrorAttribute), currentOnError, ref prevAttributeType))
                     {
                         onError = onError ?? new List<SerializationErrorCallback>();
+#pragma warning disable CS8602 // Possible dereference of a null reference.
                         onError.Add(JsonContract.CreateSerializationErrorCallback(method));
+#pragma warning restore CS8602 // Possible dereference of a null reference.
                         currentOnError = method;
                     }
                 }
@@ -1633,7 +1643,7 @@ namespace Newtonsoft.Json.Serialization
                 return null;
             }
 
-            MethodCall<object, object> shouldSerializeCall =
+            MethodCall<object, object?> shouldSerializeCall =
                 JsonTypeReflector.ReflectionDelegateFactory.CreateMethodCall<object>(shouldSerializeMethod);
 
             return o => (bool)shouldSerializeCall(o);
@@ -1652,7 +1662,7 @@ namespace Newtonsoft.Json.Serialization
                 return;
             }
 
-            Func<object, object> specifiedPropertyGet = JsonTypeReflector.ReflectionDelegateFactory.CreateGet<object>(specifiedMember);
+            Func<object, object?> specifiedPropertyGet = JsonTypeReflector.ReflectionDelegateFactory.CreateGet<object>(specifiedMember);
 
             property.GetIsSpecified = o => (bool)specifiedPropertyGet(o);
 

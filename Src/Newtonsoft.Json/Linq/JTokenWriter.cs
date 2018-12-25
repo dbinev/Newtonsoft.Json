@@ -37,11 +37,11 @@ namespace Newtonsoft.Json.Linq
     /// </summary>
     public partial class JTokenWriter : JsonWriter
     {
-        private JContainer _token;
-        private JContainer _parent;
+        private JContainer? _token;
+        private JContainer? _parent;
         // used when writer is writing single value and the value has no containing parent
-        private JValue _value;
-        private JToken _current;
+        private JValue? _value;
+        private JToken? _current;
 
         /// <summary>
         /// Gets the <see cref="JToken"/> at the writer's current position.

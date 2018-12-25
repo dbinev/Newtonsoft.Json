@@ -31,6 +31,7 @@ using System.Globalization;
 #if HAVE_DYNAMIC
 using System.Dynamic;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 #endif
 #if HAVE_BIG_INTEGER
 using System.Numerics;
@@ -964,7 +965,7 @@ namespace Newtonsoft.Json.Linq
         private class JValueDynamicProxy : DynamicProxy<JValue>
         {
 #pragma warning disable CS8610 // Nullability of reference types in type of parameter doesn't match overridden member.
-            public override bool TryConvert(JValue instance, ConvertBinder binder, out object? result)
+            public override bool TryConvert(JValue instance, ConvertBinder binder, [NotNullWhenTrue]out object? result)
 #pragma warning restore CS8610 // Nullability of reference types in type of parameter doesn't match overridden member.
             {
                 if (binder.Type == typeof(JValue) || binder.Type == typeof(JToken))
@@ -986,7 +987,7 @@ namespace Newtonsoft.Json.Linq
             }
 
 #pragma warning disable CS8610 // Nullability of reference types in type of parameter doesn't match overridden member.
-            public override bool TryBinaryOperation(JValue instance, BinaryOperationBinder binder, object arg, out object? result)
+            public override bool TryBinaryOperation(JValue instance, BinaryOperationBinder binder, object arg, [NotNullWhenTrue]out object? result)
 #pragma warning restore CS8610 // Nullability of reference types in type of parameter doesn't match overridden member.
             {
                 object? compareValue = arg is JValue value ? value.Value : arg;
